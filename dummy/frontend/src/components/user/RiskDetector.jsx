@@ -132,9 +132,9 @@ const PasswordGate = ({ member, householdId, onUnlocked }) => {
 // ─────────────────────────────────────────────
 // MEMBER RISK CARD — used for both own & head views
 // ─────────────────────────────────────────────
-const MemberRiskCard = ({ member, householdId, isOwn = false, isHighlighted = false, expanded: forceExpanded = false }) => {
+const MemberRiskCard = ({ member, householdId, isOwn = false, isHighlighted = false, expanded: forceExpanded = false, preUnlockedData = null }) => {
     const [expanded, setExpanded] = useState(forceExpanded);
-    const [unlockedData, setUnlockedData] = useState(null);
+    const [unlockedData, setUnlockedData] = useState(preUnlockedData);
     const cardRef = useRef(null);
 
     // Auto-scroll + expand when highlighted (head clicked this member in the list)
@@ -381,7 +381,7 @@ const FamilyRiskSection = ({ family }) => {
 // ─────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────
-const RiskDetector = ({ data: householdData, currentUserName, isHead, selectedMemberId, forceSingleView = false, singleMemberId }) => {
+const RiskDetector = ({ data: householdData, currentUserName, isHead, selectedMemberId, forceSingleView = false, singleMemberId, preUnlockedData }) => {
     const [riskData, setRiskData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -475,6 +475,7 @@ const RiskDetector = ({ data: householdData, currentUserName, isHead, selectedMe
                                     householdId={householdData.householdId}
                                     isOwn={isHead || targetMember.name?.toLowerCase().trim() === currentUserName?.toLowerCase().trim()} // Head or true owner can check symptoms
                                     expanded={true}
+                                    preUnlockedData={preUnlockedData}
                                 />
                             </div>
                         )}

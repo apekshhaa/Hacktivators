@@ -206,6 +206,7 @@ const AdminHome = () => {
 
                     {/* Right Actions (Right Aligned) */}
                     <div className="flex items-center justify-end gap-2 pr-1">
+                        <div id="nav-translate-container" className="flex items-center justify-center mr-2"></div>
 
                         {/* Search Pill */}
                         <div className="hidden 2xl:flex items-center bg-white/5 rounded-full px-4 py-2 border border-white/10 w-64">

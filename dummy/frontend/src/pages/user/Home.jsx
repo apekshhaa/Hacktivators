@@ -59,7 +59,7 @@ const Home = () => {
 
                     {/* Right Actions (Right Aligned) */}
                     <div className="flex items-center justify-end gap-2 pr-1">
-
+                        <div id="nav-translate-container" className="flex items-center justify-center mr-2"></div>
                         <button className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white/10 transition-colors shrink-0">
                             <HomeIcon size={18} />
                         </button>

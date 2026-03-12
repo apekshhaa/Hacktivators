@@ -48,16 +48,24 @@ const Summary = () => {
         }
     };
 
-    const updateMemberData = (memberId, newData) => {
+    const updateMemberData = (memberId, newData, mode, memberName) => {
         setData(prev => ({
             ...prev,
             familyMembers: prev.familyMembers.map(m =>
                 (m._id === memberId || m.name === memberId) ? { ...m, ...newData } : m
             )
         }));
-        // Auto-select the member after unlock for immediate feedback
-        setSelectedMemberId(memberId);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        if (mode === 'unlock' && memberName) {
+            // Auto-navigate to risk page immediately after successful unlock
+            navigate(`/member-risk/${data.householdId}/${memberName}`, {
+                state: { preUnlockedData: { status: newData.status, flag: newData.flag } }
+            });
+        } else {
+            // Auto-select the member after unlock/lock for immediate feedback
+            setSelectedMemberId(memberId);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     // Helper to format date as dd/mm/yyyy

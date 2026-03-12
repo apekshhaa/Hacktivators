@@ -5,7 +5,15 @@ const PrivacyLockModal = ({ isOpen, onClose, member, householdId, onUpdate }) =>
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
-    const [mode, setMode] = useState(member?.isLocked ? 'unlock' : 'lock');
+    const [mode, setMode] = useState('lock');
+
+    React.useEffect(() => {
+        if (member && isOpen) {
+            setMode(member.isLocked ? 'unlock' : 'lock');
+            setPassword('');
+            setError('');
+        }
+    }, [member, isOpen]);
 
     const handleAction = async (e) => {
         e.preventDefault();
@@ -38,19 +46,19 @@ const PrivacyLockModal = ({ isOpen, onClose, member, householdId, onUpdate }) =>
                         status: data.status,
                         flag: data.flag,
                         isLocked: false
-                    });
+                    }, mode, member.name);
                 } else if (mode === 'lock') {
                     onUpdate(memberKey, {
                         isLocked: true,
                         status: 'Hidden',
                         flag: null
-                    });
+                    }, mode, member.name);
                 } else if (mode === 'remove') {
                     onUpdate(memberKey, {
                         isLocked: false,
                         status: 'Healthy',
                         flag: null
-                    });
+                    }, mode, member.name);
                 }
                 onClose();
             } else {

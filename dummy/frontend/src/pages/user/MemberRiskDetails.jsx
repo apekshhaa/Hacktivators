@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
 import { getHouseholdSummary } from '../../services/api';
 import RiskDetector from '../../components/user/RiskDetector';
@@ -7,6 +7,8 @@ import RiskDetector from '../../components/user/RiskDetector';
 const MemberRiskDetails = () => {
     const { householdId, memberName } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    const preUnlockedData = location.state?.preUnlockedData;
     
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -83,6 +85,7 @@ const MemberRiskDetails = () => {
                         selectedMemberId={memberName}
                         forceSingleView={true}
                         singleMemberId={memberName}
+                        preUnlockedData={preUnlockedData}
                     />
                 </div>
             </div>
