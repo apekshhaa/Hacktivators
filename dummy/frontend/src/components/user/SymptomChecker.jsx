@@ -27,7 +27,7 @@ const RISK_STYLES = {
     High:     { color: 'text-red-400',    bg: 'bg-red-500/10',    border: 'border-red-500/20',    bar: 'bg-red-500',    label: 'See Doctor Now' },
 };
 
-const SymptomChecker = ({ member }) => {
+const SymptomChecker = ({ member, householdId }) => {
     // If we have a member, pull their existing flag/symptoms as initial state
     const initialSymptoms = React.useMemo(() => {
         if (!member || !member.flag) return [];
@@ -41,6 +41,7 @@ const SymptomChecker = ({ member }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showAll, setShowAll] = useState(false);
+    const [savedMsg, setSavedMsg] = useState('');
 
     const toggle = (id) => {
         setSelected(prev =>
@@ -67,6 +68,30 @@ const SymptomChecker = ({ member }) => {
             const data = await res.json();
             if (res.ok) {
                 setResult(data);
+
+                // Auto-save symptoms to the member's database record
+                if (member && householdId && member.memberId) {
+                    const symptomText = selected.map(s => {
+                        const opt = SYMPTOM_OPTIONS.find(o => o.id === s);
+                        return opt ? opt.label : s;
+                    }).join(', ');
+
+                    const newStatus = data.risk_level === 'High' ? 'Critical'
+                        : data.risk_level === 'Moderate' || data.risk_level === 'Mild' ? 'Follow-up'
+                        : 'Healthy';
+
+                    try {
+                        await fetch(`http://localhost:5000/api/households/${householdId}/members/${member.memberId}/symptoms`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ status: newStatus, flag: symptomText })
+                        });
+                        setSavedMsg('Symptoms saved to your health record.');
+                        setTimeout(() => setSavedMsg(''), 4000);
+                    } catch {
+                        // silent fail — analysis still shown
+                    }
+                }
             } else {
                 setError(data.error || 'Analysis failed. Please try again.');
             }
@@ -166,6 +191,13 @@ const SymptomChecker = ({ member }) => {
                     <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3">
                         <AlertTriangle size={16} className="text-red-400 shrink-0" />
                         <p className="text-sm text-red-300">{error}</p>
+                    </div>
+                )}
+
+                {savedMsg && (
+                    <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3">
+                        <ShieldCheck size={16} className="text-green-400 shrink-0" />
+                        <p className="text-sm text-green-300">{savedMsg}</p>
                     </div>
                 )}
 

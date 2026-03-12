@@ -141,7 +141,7 @@ const Home = () => {
                     </h2>
                     <p className="text-xs text-gray-500 mt-1">Live 14-day outbreak risk indicator for your village</p>
                 </div>
-                <VillageHealthMap />
+                <VillageHealthMap role="user" />
             </section>
 
             {/* Map Modal */}
