@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Save, ArrowLeft, Check, X, Printer, RefreshCw, Download, Trash2, Edit2, Lock, Unlock, Users, Dumbbell, Syringe, Sparkles, Zap, Gem, Calendar, Award, CheckCircle, Gift, Activity } from 'lucide-react';
+import { Search, Save, ArrowLeft, Check, X, RefreshCw, Trash2, Edit2, Lock, Unlock, Zap, Gem, Calendar, Award, CheckCircle, Gift } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getRewards, updateRewards } from '../../services/api';
 
@@ -303,11 +303,6 @@ const AdminRewardsPage = () => {
                                     }`}
                             >
                                 <div className="flex gap-4 mb-4">
-                                    {badge.icon === '👨‍👩‍👧‍👦' ? <Users size={28} /> :
-                                        badge.icon === '💪' ? <Dumbbell size={28} /> :
-                                            badge.icon === '💉' ? <Syringe size={28} /> :
-                                                badge.icon === '✨' ? <Sparkles size={28} /> :
-                                                    <Award size={28} />}
                                     <div className="flex-1 min-w-0">
                                         <h4 className="font-bold text-white truncate">{badge.name}</h4>
                                         <p className="text-xs text-gray-400 mt-1 line-clamp-2">{badge.desc}</p>
@@ -417,47 +412,7 @@ const AdminRewardsPage = () => {
                     </div>
                 </div>
 
-                {/* Footer Actions */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-12">
-                    <div className="flex gap-3 w-full md:w-auto">
-                        <button
-                            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-orange-500/10 text-orange-500 border border-orange-500/20 hover:bg-orange-500/20 transition-all font-semibold text-sm flex-1 md:flex-none"
-                            onClick={() => alert("Report exported")}
-                        >
-                            <Download size={16} />
-                            Export Report
-                        </button>
-                        <button
-                            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10 transition-all font-semibold text-sm flex-1 md:flex-none"
-                            onClick={() => window.print()}
-                        >
-                            <Printer size={16} />
-                            Print Details
-                        </button>
-                        <button
-                            className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10 transition-all font-semibold text-sm flex-1 md:flex-none"
-                            onClick={handleSearch}
-                        >
-                            <RefreshCw size={16} />
-                            Refresh Data
-                        </button>
-                    </div>
 
-                    <button
-                        className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-all font-semibold text-sm w-full md:w-auto shadow-lg shadow-red-500/10"
-                        onClick={() => {
-                            if (window.confirm('Are you sure? This will reset all points and badges.')) {
-                                setPoints(0);
-                                setStreak(0);
-                                setBadges(DEFAULT_BADGES.map(b => ({ ...b, unlocked: false })));
-                                saveChanges();
-                            }
-                        }}
-                    >
-                        <Trash2 size={16} />
-                        Reset All Rewards
-                    </button>
-                </div>
 
             </div>
         </div>
