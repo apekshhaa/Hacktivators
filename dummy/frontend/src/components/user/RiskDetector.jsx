@@ -297,7 +297,7 @@ const MemberRiskCard = ({ member, householdId, isOwn = false, isHighlighted = fa
                             {/* Symptom Checker - Only for own profile */}
                             {isOwn && (
                                 <div className="mt-4 pt-4 border-t border-white/10">
-                                    <SymptomChecker member={member} />
+                                    <SymptomChecker member={member} householdId={householdId} />
                                 </div>
                             )}
                         </>

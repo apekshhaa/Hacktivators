@@ -293,39 +293,6 @@ const AdminHome = () => {
                     </div>
 
 
-                    {/* Bottom Left: Outbreak Prediction */}
-                    <div
-                        onClick={() => navigate('/admin/outbreak')}
-                        className="bg-red-500/10 border border-red-500/20 p-6 rounded-3xl flex-1 min-h-[220px] flex flex-col justify-center relative overflow-hidden hover:bg-red-500/15 transition-all cursor-pointer"
-                    >
-                        <div className="absolute top-0 right-0 p-4 opacity-10 text-red-500">
-                            <TrendingUp size={80} />
-                        </div>
-                        <div className="flex items-center gap-4 mb-3 text-red-400">
-                            <AlertTriangle size={24} />
-                            <h2 className="text-lg font-bold">Outbreak Prediction</h2>
-                        </div>
-                        <div className="space-y-3">
-                            <div>
-                                <div className="flex justify-between text-xs text-gray-300 mb-1">
-                                    <span>Dengue Risk</span>
-                                    <span className="text-red-400 font-bold">High (85%)</span>
-                                </div>
-                                <div className="w-full bg-black/30 rounded-full h-1.5">
-                                    <div className="bg-red-500 h-1.5 rounded-full w-[85%]"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div className="flex justify-between text-xs text-gray-300 mb-1">
-                                    <span>Seasonal Flu</span>
-                                    <span className="text-yellow-400 font-bold">Moderate (45%)</span>
-                                </div>
-                                <div className="w-full bg-black/30 rounded-full h-1.5">
-                                    <div className="bg-yellow-400 h-1.5 rounded-full w-[45%]"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
 
@@ -473,7 +440,7 @@ const AdminHome = () => {
 
             {/* Village Health Map - Full Width */}
             <section className="relative z-10 max-w-[1600px] mx-auto px-6 pb-10">
-                <VillageHealthMap />
+                <VillageHealthMap role="admin" />
             </section>
 
             {showAddModal && (

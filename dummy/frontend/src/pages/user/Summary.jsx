@@ -344,10 +344,11 @@ const Summary = () => {
                                 </div>
                             </div>
 
-                            {/* New: Household Risk Section */}
+                            {/* Enhanced: Household Risk Section */}
                             {!currentSelected && riskData && (
                                 <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
-                                    <div className="p-6 border-b border-white/10 flex items-center justify-between bg-accent/5">
+                                    {/* Header */}
+                                    <div className="p-6 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-accent/5 to-transparent">
                                         <h3 className="text-lg font-semibold flex items-center gap-2">
                                             <ShieldAlert size={20} className="text-accent" />
                                             Overall Household Risk Summary
@@ -360,86 +361,138 @@ const Summary = () => {
                                             Risk Level: {riskData.family?.riskLevel || 'Low'}
                                         </div>
                                     </div>
-                                    <div className="p-6 grid md:grid-cols-2 gap-8 items-center text-center md:text-left">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-center md:justify-start gap-4">
-                                                <div className="relative w-24 h-24">
-                                                    <svg className="w-full h-full" viewBox="0 0 100 100">
-                                                        <circle className="text-white/5" strokeWidth="8" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
-                                                        <circle className={
-                                                            riskData.family?.riskLevel === 'High' ? 'text-red-500' :
-                                                            riskData.family?.riskLevel === 'Moderate' ? 'text-orange-500' :
-                                                            'text-green-500'
-                                                        } strokeWidth="8" strokeDasharray={251.2} strokeDashoffset={251.2 - (251.2 * (riskData.family?.avgScore || 0) / 100)} strokeLinecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
-                                                    </svg>
-                                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                                        <span className="text-2xl font-black">{riskData.family?.avgScore || 0}</span>
-                                                        <span className="text-[10px] text-gray-400 uppercase">Score</span>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm text-gray-400">Based on all household members,</p>
-                                                    <p className="text-lg font-bold">Health Assessment is {
-                                                        riskData.family?.riskLevel === 'High' ? 'Critical' :
-                                                        riskData.family?.riskLevel === 'Moderate' ? 'Concerning' :
-                                                        'Stable'
-                                                    }</p>
+
+                                    <div className="p-6 space-y-6">
+                                        {/* Top row: Score gauge + quick stats */}
+                                        <div className="flex flex-col md:flex-row items-center gap-6">
+                                            {/* Animated radial gauge */}
+                                            <div className="relative w-32 h-32 shrink-0">
+                                                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                                                    <circle className="text-white/5" strokeWidth="8" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                                    <circle className={
+                                                        riskData.family?.riskLevel === 'High' ? 'text-red-500' :
+                                                        riskData.family?.riskLevel === 'Moderate' ? 'text-orange-500' :
+                                                        'text-green-500'
+                                                    } strokeWidth="8" strokeDasharray={251.2} strokeDashoffset={251.2 - (251.2 * (riskData.family?.avgScore || 0) / 100)} strokeLinecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" style={{ transition: 'stroke-dashoffset 1.5s ease-out' }} />
+                                                </svg>
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                                    <span className={`text-3xl font-black ${
+                                                        riskData.family?.riskLevel === 'High' ? 'text-red-400' :
+                                                        riskData.family?.riskLevel === 'Moderate' ? 'text-orange-400' :
+                                                        'text-green-400'
+                                                    }`}>{riskData.family?.avgScore || 0}</span>
+                                                    <span className="text-[9px] text-gray-500 uppercase tracking-wider">Risk Score</span>
                                                 </div>
                                             </div>
 
-                                            {riskData.family?.alerts?.length > 0 ? (
-                                                <div className="space-y-2">
-                                                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Active Household Alerts</p>
-                                                    {riskData.family.alerts.map((alert, idx) => (
-                                                        <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-start gap-3">
-                                                            <AlertTriangle size={16} className={alert.severity === 'High' ? 'text-red-400' : 'text-orange-400'} />
-                                                            <div>
-                                                                <p className="text-sm font-medium">{alert.message}</p>
-                                                                {alert.recommendation && <p className="text-xs text-gray-400 mt-1 italic">{alert.recommendation}</p>}
-                                                            </div>
-                                                        </div>
-                                                    ))}
+                                            {/* Quick stats grid */}
+                                            <div className="flex-1 w-full">
+                                                <p className="text-sm text-gray-400 mb-1">Based on all household members,</p>
+                                                <p className="text-xl font-bold mb-4">Health Assessment is {
+                                                    riskData.family?.riskLevel === 'High' ? 'Critical' :
+                                                    riskData.family?.riskLevel === 'Moderate' ? 'Concerning' :
+                                                    'Stable'
+                                                }</p>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    {(() => {
+                                                        const members = riskData.individual || [];
+                                                        const healthy = members.filter(m => m.risk?.level === 'Low' || m.risk?.level === 'Mild').length;
+                                                        const followUp = members.filter(m => m.risk?.level === 'Moderate').length;
+                                                        const critical = members.filter(m => m.risk?.level === 'High').length;
+                                                        return (
+                                                            <>
+                                                                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-center">
+                                                                    <p className="text-xl font-black text-green-400">{healthy}</p>
+                                                                    <p className="text-[9px] text-gray-500 uppercase">Healthy</p>
+                                                                </div>
+                                                                <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-3 text-center">
+                                                                    <p className="text-xl font-black text-yellow-400">{followUp}</p>
+                                                                    <p className="text-[9px] text-gray-500 uppercase">Watch</p>
+                                                                </div>
+                                                                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-center">
+                                                                    <p className="text-xl font-black text-red-400">{critical}</p>
+                                                                    <p className="text-[9px] text-gray-500 uppercase">Critical</p>
+                                                                </div>
+                                                            </>
+                                                        );
+                                                    })()}
                                                 </div>
-                                            ) : (
-                                                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3">
-                                                    <CheckCircle size={20} className="text-green-400" />
-                                                    <p className="text-sm text-green-200">No cross-member health risks detected.</p>
-                                                </div>
-                                            )}
+                                            </div>
                                         </div>
 
-                                        <div className="bg-black/20 rounded-2xl p-6 border border-white/5">
-                                            <h4 className="text-sm font-bold flex items-center gap-2 mb-3">
-                                                <Sparkles size={14} className="text-accent" />
-                                                Community Health Context
-                                            </h4>
-                                            <div className="space-y-4">
-                                                <div className="flex justify-between items-center text-sm">
-                                                    <span className="text-gray-400">Village Risk Trend</span>
-                                                    <span className={`font-bold ${riskData.community?.trend === 'Rising' ? 'text-red-400' : 'text-green-400'}`}>
-                                                        {riskData.community?.trend || 'Stable'}
-                                                    </span>
+                                        {/* Member health breakdown */}
+                                        {riskData.individual && riskData.individual.length > 0 && (
+                                            <div>
+                                                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Member Health Breakdown</p>
+                                                <div className="space-y-2">
+                                                    {riskData.individual.map((member, idx) => {
+                                                        const score = member.risk?.score || 0;
+                                                        const level = member.risk?.level || 'Low';
+                                                        const barColor = level === 'High' ? 'bg-red-500' : level === 'Moderate' ? 'bg-orange-500' : level === 'Mild' ? 'bg-yellow-400' : 'bg-green-500';
+                                                        const textColor = level === 'High' ? 'text-red-400' : level === 'Moderate' ? 'text-orange-400' : level === 'Mild' ? 'text-yellow-400' : 'text-green-400';
+                                                        return (
+                                                            <div key={idx} className="bg-black/20 rounded-xl p-3 border border-white/5 hover:border-white/10 transition-colors cursor-pointer" onClick={() => navigate(`/member-risk/${data.householdId}/${member.name}`)}>
+                                                                <div className="flex items-center justify-between mb-1.5">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${level === 'High' ? 'bg-red-500/20' : level === 'Moderate' ? 'bg-orange-500/20' : 'bg-green-500/20'}`}>
+                                                                            {member.age < 12 ? <Baby size={12} className={textColor} /> : <User size={12} className={textColor} />}
+                                                                        </div>
+                                                                        <span className="text-sm font-semibold text-white">{member.name}</span>
+                                                                        <span className="text-[10px] text-gray-500">{member.relation} · {member.age}yrs</span>
+                                                                    </div>
+                                                                    <span className={`text-xs font-bold ${textColor}`}>{score}/100</span>
+                                                                </div>
+                                                                <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                                                    <div className={`h-full ${barColor} rounded-full`} style={{ width: `${score}%`, transition: 'width 1s ease-out' }} />
+                                                                </div>
+                                                                {member.risk?.predictedCondition && member.risk.predictedCondition !== 'Healthy' && (
+                                                                    <p className="text-[10px] text-accent mt-1">Possible: {member.risk.predictedCondition}</p>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })}
                                                 </div>
-                                                <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                                                    <div className={`h-full ${riskData.community?.trend === 'Rising' ? 'bg-red-500' : 'bg-green-500'} w-1/2`} />
+                                            </div>
+                                        )}
+
+                                        {/* Alerts */}
+                                        {riskData.family?.alerts?.length > 0 ? (
+                                            <div className="space-y-2">
+                                                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Active Household Alerts</p>
+                                                {riskData.family.alerts.map((alert, idx) => (
+                                                    <div key={idx} className={`rounded-xl p-3 flex items-start gap-3 border ${
+                                                        alert.severity === 'High' ? 'bg-red-500/10 border-red-500/20' : 'bg-orange-500/10 border-orange-500/20'
+                                                    }`}>
+                                                        <AlertTriangle size={16} className={alert.severity === 'High' ? 'text-red-400' : 'text-orange-400'} />
+                                                        <div>
+                                                            <p className="text-sm font-medium">{alert.message}</p>
+                                                            {alert.recommendation && <p className="text-xs text-gray-400 mt-1 italic">{alert.recommendation}</p>}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3">
+                                                <CheckCircle size={20} className="text-green-400" />
+                                                <div>
+                                                    <p className="text-sm font-semibold text-green-300">All Clear</p>
+                                                    <p className="text-xs text-green-200/70">No cross-member health risks detected. Keep up the good habits!</p>
                                                 </div>
-                                                <p className="text-xs text-gray-500 leading-relaxed italic">
-                                                    "{riskData.community?.message || 'Local health patterns appear stable across the village.'}"
+                                            </div>
+                                        )}
+
+                                        {/* Health Tip */}
+                                        <div className="bg-accent/5 border border-accent/20 rounded-xl p-4 flex items-start gap-3">
+                                            <Sparkles size={16} className="text-accent shrink-0 mt-0.5" />
+                                            <div>
+                                                <p className="text-xs font-bold text-accent mb-1">Health Tip</p>
+                                                <p className="text-xs text-gray-300 leading-relaxed">
+                                                    {riskData.family?.riskLevel === 'High'
+                                                        ? 'Multiple family members need medical attention. Please contact your ASHA worker or visit the nearest health centre immediately.'
+                                                        : riskData.family?.riskLevel === 'Moderate'
+                                                        ? 'Some family members have health concerns. Ensure regular check-ups and follow the recommended treatment plans.'
+                                                        : 'Your family health looks good! Continue maintaining hygiene, eating nutritious food, and staying active.'}
                                                 </p>
-                                                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
-                                                    <div className="text-center">
-                                                        <p className="text-[10px] text-gray-500 uppercase">Fever</p>
-                                                        <p className="text-sm font-bold">{riskData.community?.avgFever || 0}%</p>
-                                                    </div>
-                                                    <div className="text-center">
-                                                        <p className="text-[10px] text-gray-500 uppercase">Cough</p>
-                                                        <p className="text-sm font-bold">{riskData.community?.avgCough || 0}%</p>
-                                                    </div>
-                                                    <div className="text-center">
-                                                        <p className="text-[10px] text-gray-500 uppercase">Risk Index</p>
-                                                        <p className="text-sm font-bold text-accent">{riskData.community?.avgRisk || 0}/10</p>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
