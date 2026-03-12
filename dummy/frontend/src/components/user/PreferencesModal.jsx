@@ -51,8 +51,8 @@ const PreferencesModal = ({ isOpen, onClose, householdId }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0d4648]/80 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-[#2b4548] border border-white/10 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden relative">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0a0a1a]/80 backdrop-blur-sm animate-in fade-in duration-300">
+            <div className="bg-[#1a1a2e] border border-white/10 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden relative">
 
                 {/* Header */}
                 <div className="px-8 pt-8 pb-4 flex justify-between items-center">
@@ -91,7 +91,7 @@ const PreferencesModal = ({ isOpen, onClose, householdId }) => {
                                     onChange={() => setPreference(option.id)}
                                 />
                                 <div className={`p-3 rounded-xl transition-colors
-                                    ${preference === option.id ? 'bg-accent text-[#0d4648]' : 'bg-white/5 text-white/40 group-hover:text-white'}`}>
+                                    ${preference === option.id ? 'bg-accent text-[#0a0a1a]' : 'bg-white/5 text-white/40 group-hover:text-white'}`}>
                                     <option.icon size={20} />
                                 </div>
                                 <div className="flex-1">
@@ -100,7 +100,7 @@ const PreferencesModal = ({ isOpen, onClose, householdId }) => {
                                 </div>
                                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
                                     ${preference === option.id ? 'border-accent bg-accent' : 'border-white/10'}`}>
-                                    {preference === option.id && <div className="w-2 h-2 bg-[#0d4648] rounded-full" />}
+                                    {preference === option.id && <div className="w-2 h-2 bg-[#0a0a1a] rounded-full" />}
                                 </div>
                             </label>
                         ))}
@@ -116,7 +116,7 @@ const PreferencesModal = ({ isOpen, onClose, householdId }) => {
                     <button
                         onClick={handleSave}
                         disabled={loading}
-                        className="w-full bg-accent hover:bg-accent/90 disabled:opacity-50 text-[#0d4648] py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
+                        className="w-full bg-accent hover:bg-accent/90 disabled:opacity-50 text-[#0a0a1a] py-4 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
                     >
                         {loading ? 'Saving...' : (
                             <>

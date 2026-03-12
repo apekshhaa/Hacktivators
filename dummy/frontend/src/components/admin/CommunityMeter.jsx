@@ -32,8 +32,8 @@ const CommunityMeter = () => {
     const { percentage, threshold, isUnlocked, completedHouseholds, totalHouseholds } = stats;
 
     const RewardsModal = () => (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0d4648]/80 backdrop-blur-sm animate-in fade-in duration-300">
-            <div className="bg-[#2b4548] border border-white/10 rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#0a0a1a]/80 backdrop-blur-sm animate-in fade-in duration-300">
+            <div className="bg-[#1a1a2e] border border-white/10 rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
                 <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-accent">
@@ -74,7 +74,7 @@ const CommunityMeter = () => {
                     <div className="bg-gradient-to-br from-accent/10 to-transparent rounded-2xl p-6 border border-accent/20 relative overflow-hidden group">
                         <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-accent/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
                         <div className="relative z-10 flex items-start gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-accent text-[#0d4648] flex items-center justify-center shrink-0 shadow-lg">
+                            <div className="w-12 h-12 rounded-xl bg-accent text-[#0a0a1a] flex items-center justify-center shrink-0 shadow-lg">
                                 <HeartPulse size={24} />
                             </div>
                             <div>
@@ -128,7 +128,7 @@ const CommunityMeter = () => {
                                 <div key={idx} className={`flex items-center gap-4 p-4 rounded-xl border transition-all
                                     ${percentage >= item.threshold ? 'bg-accent/10 border-accent/20' : 'bg-white/5 border-white/5 opacity-50'}`}>
                                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center
-                                        ${percentage >= item.threshold ? 'bg-accent text-[#0d4648]' : 'bg-white/10 text-white/40'}`}>
+                                        ${percentage >= item.threshold ? 'bg-accent text-[#0a0a1a]' : 'bg-white/10 text-white/40'}`}>
                                         {percentage >= item.threshold ? <CheckCircle2 size={18} /> : item.icon}
                                     </div>
                                     <div className="flex-1">
@@ -147,7 +147,7 @@ const CommunityMeter = () => {
                 <div className="p-6 bg-white/5 border-t border-white/10">
                     <button
                         onClick={() => setIsDetailsOpen(false)}
-                        className="w-full py-4 bg-accent hover:bg-accent/90 text-[#0d4648] font-bold rounded-2xl transition-all shadow-[0_0_20px_rgba(209,240,114,0.2)]">
+                        className="w-full py-4 bg-accent hover:bg-accent/90 text-[#0a0a1a] font-bold rounded-2xl transition-all shadow-[0_0_20px_rgba(209,240,114,0.2)]">
                         Got it, thanks!
                     </button>
                 </div>
@@ -240,7 +240,7 @@ const CommunityMeter = () => {
                         <ChevronRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                     {isUnlocked && (
-                        <div className="w-12 h-12 bg-accent rounded-2xl flex items-center justify-center text-[#0d4648] animate-bounce-slow shadow-lg">
+                        <div className="w-12 h-12 bg-accent rounded-2xl flex items-center justify-center text-[#0a0a1a] animate-bounce-slow shadow-lg">
                             <Award size={24} />
                         </div>
                     )}

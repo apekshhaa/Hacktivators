@@ -46,7 +46,7 @@ const BookingModal = ({ isOpen, onClose, householdId, initialData = {} }) => {
     if (isSubmitted) {
         return (
             <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in zoom-in duration-300">
-                <div className="bg-[#0d4648] w-full max-w-md p-8 rounded-2xl border border-white/10 text-center shadow-2xl">
+                <div className="bg-[#0a0a1a] w-full max-w-md p-8 rounded-2xl border border-white/10 text-center shadow-2xl">
                     <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-green-400">
                         <Calendar size={32} />
                     </div>
@@ -56,7 +56,7 @@ const BookingModal = ({ isOpen, onClose, householdId, initialData = {} }) => {
                     </p>
                     <button
                         onClick={() => { onClose(); setIsSubmitted(false); }}
-                        className="bg-accent text-[#0d4648] px-8 py-3 rounded-xl font-semibold hover:bg-accent/90 transition-all w-full"
+                        className="bg-accent text-[#0a0a1a] px-8 py-3 rounded-xl font-semibold hover:bg-accent/90 transition-all w-full"
                     >
                         Close
                     </button>
@@ -67,7 +67,7 @@ const BookingModal = ({ isOpen, onClose, householdId, initialData = {} }) => {
 
     return (
         <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-            <div className="bg-[#0d4648] w-full max-w-lg rounded-2xl border border-white/10 shadow-2xl relative flex flex-col max-h-[90vh]">
+            <div className="bg-[#0a0a1a] w-full max-w-lg rounded-2xl border border-white/10 shadow-2xl relative flex flex-col max-h-[90vh]">
 
                 <div className="p-6 border-b border-white/10 flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-white">
@@ -145,7 +145,7 @@ const BookingModal = ({ isOpen, onClose, householdId, initialData = {} }) => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-accent text-[#0d4648] py-4 rounded-xl font-bold hover:bg-accent/90 transition-all mt-4 disabled:opacity-50"
+                        className="w-full bg-accent text-[#0a0a1a] py-4 rounded-xl font-bold hover:bg-accent/90 transition-all mt-4 disabled:opacity-50"
                     >
                         {loading ? 'Booking...' : 'Confirm Booking'}
                     </button>

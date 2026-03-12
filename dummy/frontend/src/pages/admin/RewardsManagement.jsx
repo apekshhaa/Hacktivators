@@ -129,7 +129,7 @@ const RewardsManagement = () => {
     const getEligibleCount = () => results?.eligibility.filter(e => e.eligible).length || 0;
 
     return (
-        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-white overflow-x-hidden relative">
+        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-white overflow-x-hidden relative">
             {/* Background Ambient Glows */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
@@ -199,7 +199,7 @@ const RewardsManagement = () => {
                             </div>
                             <button
                                 onClick={searchHousehold}
-                                className="self-end bg-accent hover:bg-accent/90 text-[#0d4648] px-8 py-3 rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(209,240,114,0.3)]"
+                                className="self-end bg-accent hover:bg-accent/90 text-[#0a0a1a] px-8 py-3 rounded-xl font-semibold text-sm transition-all shadow-[0_0_20px_rgba(209,240,114,0.3)]"
                             >
                                 Search
                             </button>

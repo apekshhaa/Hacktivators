@@ -48,7 +48,7 @@ const RescheduleModal = ({ isOpen, onClose, householdId, headName, initialDate, 
 
     return (
         <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-            <div className="bg-[#0d4648] w-full max-w-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="bg-[#0a0a1a] w-full max-w-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
                 <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
                     <h2 className="text-xl font-bold text-white flex items-center gap-2">
                         <Calendar size={20} className="text-accent" />
@@ -102,7 +102,7 @@ const RescheduleModal = ({ isOpen, onClose, householdId, headName, initialDate, 
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 py-4 bg-accent hover:bg-accent/90 text-[#0d4648] font-bold rounded-2xl transition-all shadow-[0_0_20px_rgba(209,240,114,0.2)] disabled:opacity-50"
+                            className="flex-1 py-4 bg-accent hover:bg-accent/90 text-[#0a0a1a] font-bold rounded-2xl transition-all shadow-[0_0_20px_rgba(209,240,114,0.2)] disabled:opacity-50"
                         >
                             {loading ? 'Updating...' : 'Confirm'}
                         </button>

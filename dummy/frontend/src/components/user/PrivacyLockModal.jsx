@@ -76,7 +76,7 @@ const PrivacyLockModal = ({ isOpen, onClose, member, householdId, onUpdate }) =>
 
     return (
         <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-            <div className="bg-[#2b4548] border border-white/10 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden relative p-8">
+            <div className="bg-[#1a1a2e] border border-white/10 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden relative p-8">
 
                 <button onClick={onClose} className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors">
                     <X size={20} />
@@ -126,7 +126,7 @@ const PrivacyLockModal = ({ isOpen, onClose, member, householdId, onUpdate }) =>
                             type="submit"
                             disabled={isSubmitting}
                             className={`w-full py-3.5 rounded-xl font-bold transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2
-                                ${mode === 'remove' ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-accent text-[#0d4648] hover:bg-accent/90'}`}
+                                ${mode === 'remove' ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-accent text-[#0a0a1a] hover:bg-accent/90'}`}
                         >
                             {isSubmitting ? 'Processing...' : (
                                 <>

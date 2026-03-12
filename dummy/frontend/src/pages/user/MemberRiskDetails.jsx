@@ -31,7 +31,7 @@ const MemberRiskDetails = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-white flex flex-col items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-white flex flex-col items-center justify-center">
                 <Loader2 size={48} className="text-accent animate-spin mb-4" />
                 <p>Loading member data...</p>
             </div>
@@ -40,7 +40,7 @@ const MemberRiskDetails = () => {
 
     if (error || !data) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-white flex flex-col items-center justify-center px-4 text-center">
+            <div className="min-h-screen bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-white flex flex-col items-center justify-center px-4 text-center">
                 <AlertCircle size={48} className="text-red-400 mb-4" />
                 <h2 className="text-2xl font-bold mb-2">Error</h2>
                 <p className="text-gray-400 mb-8">{error || 'Something went wrong.'}</p>
@@ -55,7 +55,7 @@ const MemberRiskDetails = () => {
     }
 
     return (
-        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-white p-6 md:p-10 relative overflow-hidden">
+        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-white p-6 md:p-10 relative overflow-hidden">
             {/* Background Glows */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>

@@ -54,7 +54,7 @@ const ChatBot = () => {
                     {/* Header */}
                     <div className="bg-accent/10 p-4 border-b border-white/10 flex justify-between items-center">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-[#0d4648]">
+                            <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-[#0a0a1a]">
                                 <Bot size={18} />
                             </div>
                             <div>
@@ -64,7 +64,7 @@ const ChatBot = () => {
                                         <button
                                             key={lang}
                                             onClick={() => setLanguage(lang)}
-                                            className={`text-[10px] px-1.5 py-0.5 rounded border ${language === lang ? 'bg-accent text-[#0d4648] border-accent font-bold' : 'text-gray-400 border-white/20'}`}
+                                            className={`text-[10px] px-1.5 py-0.5 rounded border ${language === lang ? 'bg-accent text-[#0a0a1a] border-accent font-bold' : 'text-gray-400 border-white/20'}`}
                                         >
                                             {lang}
                                         </button>
@@ -91,7 +91,7 @@ const ChatBot = () => {
                                     {msg.role === 'user' ? <User size={16} /> : <Bot size={16} />}
                                 </div>
                                 <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.role === 'user'
-                                    ? 'bg-accent text-[#0d4648] rounded-tr-none'
+                                    ? 'bg-accent text-[#0a0a1a] rounded-tr-none'
                                     : 'bg-white/5 text-gray-200 border border-white/10 rounded-tl-none'
                                     }`}>
                                     {msg.content}
@@ -128,7 +128,7 @@ const ChatBot = () => {
                             <button
                                 type="submit"
                                 disabled={!input.trim() || isLoading}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-accent text-[#0d4648] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent/90 transition-colors"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-accent text-[#0a0a1a] rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent/90 transition-colors"
                             >
                                 <Send size={16} />
                             </button>
@@ -140,7 +140,7 @@ const ChatBot = () => {
             {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-[#0d4648] transition-all hover:scale-110 active:scale-95 ${isOpen ? 'bg-gray-700 text-white rotate-90' : 'bg-accent animate-bounce-slow'
+                className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-[#0a0a1a] transition-all hover:scale-110 active:scale-95 ${isOpen ? 'bg-gray-700 text-white rotate-90' : 'bg-accent animate-bounce-slow'
                     }`}
             >
                 {isOpen ? <X size={24} /> : <MessageCircle size={28} />}

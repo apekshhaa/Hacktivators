@@ -149,11 +149,11 @@ const OutbreakPrediction = () => {
     }, [timeRange, village]);
 
     if (isLoading) {
-        return <div className="min-h-screen bg-[#0d4648] flex items-center justify-center text-teal-400 animate-pulse">Running AI Prediction Models...</div>;
+        return <div className="min-h-screen bg-[#0a0a1a] flex items-center justify-center text-teal-400 animate-pulse">Running AI Prediction Models...</div>;
     }
 
     return (
-        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-white p-6 pb-20 relative overflow-hidden">
+        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-white p-6 pb-20 relative overflow-hidden">
 
             {/* Background Ambient Glows (Matches Home/AdminHome) */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -247,7 +247,7 @@ const OutbreakPrediction = () => {
                                 <TrendingUp size={20} className="text-teal-400" />
                                 Fever Case Trends
                             </h2>
-                            <div className="flex bg-[#0d4648] rounded-lg p-1 border border-white/10">
+                            <div className="flex bg-[#0a0a1a] rounded-lg p-1 border border-white/10">
                                 {['Daily', 'Weekly', 'Monthly'].map(tab => (
                                     <button
                                         key={tab}
@@ -272,7 +272,7 @@ const OutbreakPrediction = () => {
                                     <XAxis dataKey="date" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dy={10} />
                                     <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dx={-10} />
                                     <Tooltip
-                                        contentStyle={{ backgroundColor: '#0d4648', borderColor: '#ffffff20', color: '#fff', borderRadius: '8px' }}
+                                        contentStyle={{ backgroundColor: '#0a0a1a', borderColor: '#ffffff20', color: '#fff', borderRadius: '8px' }}
                                         itemStyle={{ color: '#2dd4bf' }}
                                         cursor={{ stroke: '#ffffff20' }}
                                     />
@@ -324,7 +324,7 @@ const OutbreakPrediction = () => {
                                 <Activity size={20} className="text-pink-400" />
                                 Multi-Factor Analysis
                             </h2>
-                            <div className="flex bg-[#0d4648] rounded-lg p-1 border border-white/10">
+                            <div className="flex bg-[#0a0a1a] rounded-lg p-1 border border-white/10">
                                 {['Area', 'Line', 'Bar'].map(tab => (
                                     <button
                                         key={tab}
@@ -352,7 +352,7 @@ const OutbreakPrediction = () => {
                                         <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" vertical={false} />
                                         <XAxis dataKey="date" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dy={10} />
                                         <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dx={-10} />
-                                        <Tooltip contentStyle={{ backgroundColor: '#0d4648', borderColor: '#ffffff20', borderRadius: '8px' }} cursor={{ fill: '#ffffff05' }} />
+                                        <Tooltip contentStyle={{ backgroundColor: '#0a0a1a', borderColor: '#ffffff20', borderRadius: '8px' }} cursor={{ fill: '#ffffff05' }} />
                                         <Bar dataKey="fever" fill="#2dd4bf" radius={[4, 4, 0, 0]} />
                                         <Bar dataKey="cough" fill="#f472b6" radius={[4, 4, 0, 0]} />
                                         <Bar dataKey="diarrhea" fill="#fb923c" radius={[4, 4, 0, 0]} />
@@ -363,7 +363,7 @@ const OutbreakPrediction = () => {
                                         <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" vertical={false} />
                                         <XAxis dataKey="date" stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dy={10} />
                                         <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} dx={-10} />
-                                        <Tooltip contentStyle={{ backgroundColor: '#0d4648', borderColor: '#ffffff20', borderRadius: '8px' }} />
+                                        <Tooltip contentStyle={{ backgroundColor: '#0a0a1a', borderColor: '#ffffff20', borderRadius: '8px' }} />
                                         <Line type="monotone" dataKey="fever" stroke="#2dd4bf" strokeWidth={2} dot={false} />
                                         <Line type="monotone" dataKey="cough" stroke="#f472b6" strokeWidth={2} dot={false} />
                                         <Line type="monotone" dataKey="diarrhea" stroke="#fb923c" strokeWidth={2} dot={false} />

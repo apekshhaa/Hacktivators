@@ -31,7 +31,7 @@ const Home = () => {
         }
     };
     return (
-        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-white overflow-x-hidden relative">
+        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-white overflow-x-hidden relative">
 
             {/* Background Ambient Glows */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
@@ -110,22 +110,7 @@ const Home = () => {
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4 pt-4">
-                            <button
-                                onClick={() => setIsBookingOpen(true)}
-                                className="bg-accent hover:bg-accent/90 text-[#0d4648] px-8 py-4 rounded-full font-semibold text-sm transition-all shadow-[0_0_20px_rgba(209,240,114,0.3)]"
-                            >
-                                Book a Free Consultation
-                            </button>
-
-                            <button
-                                onClick={handleFindHospitals}
-                                className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-8 py-4 rounded-full font-medium text-sm transition-all backdrop-blur-sm cursor-pointer"
-                            >
-                                <div className="w-5 h-5 rounded-full bg-white text-[#0d4648] flex items-center justify-center">
-                                    <MapPin size={12} fill="currentColor" />
-                                </div>
-                                Find Nearby Hospitals
-                            </button>
+                            {/* Actions removed as per user request */}
                         </div>
                     </div>
 

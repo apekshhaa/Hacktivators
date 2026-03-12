@@ -144,7 +144,7 @@ const AdminRewardsPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-gray-100 font-sans selection:bg-accent/20">
+        <div className="min-h-screen bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-gray-100 font-sans selection:bg-accent/20">
 
             <div className="max-w-[1600px] mx-auto p-4 lg:p-10">
 

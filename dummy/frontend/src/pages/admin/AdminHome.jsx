@@ -179,7 +179,7 @@ const AdminHome = () => {
     };
 
     return (
-        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-white overflow-y-auto relative">
+        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-white overflow-y-auto relative">
 
             {/* Background Ambient Glows */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -369,7 +369,7 @@ const AdminHome = () => {
 
                         <button
                             onClick={() => navigate('/admin/rewards')}
-                            className="bg-accent text-[#0d4648] py-3 px-6 rounded-xl font-bold hover:bg-accent/90 transition-all shadow-[0_0_20px_rgba(209,240,114,0.2)] text-sm"
+                            className="bg-accent text-[#0a0a1a] py-3 px-6 rounded-xl font-bold hover:bg-accent/90 transition-all shadow-[0_0_20px_rgba(209,240,114,0.2)] text-sm"
                         >
                             Manage Rewards
                         </button>
@@ -483,7 +483,7 @@ const AdminHome = () => {
                                             <button
                                                 type="button"
                                                 onClick={addHealthFlag}
-                                                className="bg-accent text-[#0d4648] px-4 py-3 rounded-xl font-bold hover:bg-accent/90 transition-all flex items-center justify-center"
+                                                className="bg-accent text-[#0a0a1a] px-4 py-3 rounded-xl font-bold hover:bg-accent/90 transition-all flex items-center justify-center"
                                             >
                                                 <Plus size={20} />
                                             </button>
@@ -581,7 +581,7 @@ const AdminHome = () => {
                                         <button
                                             type="button"
                                             onClick={addFamilyMember}
-                                            className="mt-4 bg-accent text-[#0d4648] px-4 py-2 rounded-lg font-bold hover:bg-accent/90 transition-all text-sm"
+                                            className="mt-4 bg-accent text-[#0a0a1a] px-4 py-2 rounded-lg font-bold hover:bg-accent/90 transition-all text-sm"
                                         >
                                             Add Member
                                         </button>
@@ -594,7 +594,7 @@ const AdminHome = () => {
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-accent text-[#0d4648] font-bold py-3 rounded-xl hover:bg-accent/90 transition-all mt-4"
+                                    className="w-full bg-accent text-[#0a0a1a] font-bold py-3 rounded-xl hover:bg-accent/90 transition-all mt-4"
                                 >
                                     {modalMode === 'add' ? 'Create Household' : 'Update Household'}
                                 </button>

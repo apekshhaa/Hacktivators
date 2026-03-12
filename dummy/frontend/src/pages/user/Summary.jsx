@@ -179,7 +179,7 @@ const Summary = () => {
     const backPath = location.state?.from || '/home';
 
     return (
-        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0d4648] to-[#2b4548] text-white p-6 relative overflow-hidden">
+        <div className="min-h-screen font-sans bg-gradient-to-br from-[#0a0a1a] to-[#1a1a2e] text-white p-6 relative overflow-hidden">
 
             {/* Background Glows */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -234,7 +234,7 @@ const Summary = () => {
                                         value={householdId}
                                         onChange={(e) => setHouseholdId(e.target.value)}
                                     />
-                                    <button type="submit" className="bg-accent text-[#0d4648] px-6 py-3 rounded-lg font-semibold hover:bg-accent/90 transition-all">
+                                    <button type="submit" className="bg-accent text-[#0a0a1a] px-6 py-3 rounded-lg font-semibold hover:bg-accent/90 transition-all">
                                         View
                                     </button>
                                 </form>
@@ -448,7 +448,7 @@ const Summary = () => {
                                         <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group select-none">
 
                                             {/* Icon Dot */}
-                                            <div className={`flex items-center justify-center w-6 h-6 rounded-full border-2 border-[#0d4648] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow ${item.status === 'Done' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                                            <div className={`flex items-center justify-center w-6 h-6 rounded-full border-2 border-[#0a0a1a] shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow ${item.status === 'Done' ? 'bg-green-500' : 'bg-red-500'}`}></div>
 
                                             {/* Card Content */}
                                             <div className="w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] bg-white/5 p-4 rounded-xl border border-white/10 text-sm hover:border-accent/30 transition-colors">

@@ -69,10 +69,10 @@ const HospitalMapModal = ({ onClose, householdId }) => {
 
     return (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="bg-[#0d4648] w-full max-w-5xl h-[80vh] rounded-3xl border border-white/10 shadow-2xl overflow-hidden relative flex flex-col">
+            <div className="bg-[#0a0a1a] w-full max-w-5xl h-[80vh] rounded-3xl border border-white/10 shadow-2xl overflow-hidden relative flex flex-col">
 
                 {/* Header */}
-                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-[#2b4548]">
+                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-[#1a1a2e]">
                     <div>
                         <h2 className="text-2xl font-semibold text-white flex items-center gap-2">
                             <MapPin className="text-accent" /> Nearby Hospitals
@@ -161,7 +161,7 @@ const HospitalMapModal = ({ onClose, householdId }) => {
 
                                                     <button
                                                         onClick={() => handleBookAppointment(hospital)}
-                                                        className="w-full mt-2 bg-[#0d4648] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#2b4548] transition-colors"
+                                                        className="w-full mt-2 bg-[#0a0a1a] text-white py-2 rounded-lg text-sm font-medium hover:bg-[#1a1a2e] transition-colors"
                                                     >
                                                         Book Appointment
                                                     </button>

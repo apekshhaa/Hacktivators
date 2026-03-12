@@ -43,17 +43,17 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         gami: {
-          purple: '#468297',
-          'purple-dark': '#385e60',
-          'purple-light': '#6f9cb5',
+          purple: '#7c3aed',
+          'purple-dark': '#6d28d9',
+          'purple-light': '#a78bfa',
         },
         bg: {
-          primary: '#0d4648',
-          secondary: '#2b4548',
-          tertiary: '#385e60',
+          primary: '#0a0a1a',
+          secondary: '#1a1a2e',
+          tertiary: '#2d1b69',
         },
         lime: {
-          accent: '#6f9cb5',
+          accent: '#d1f072',
         },
       },
       borderRadius: {
@@ -68,9 +68,9 @@ module.exports = {
       boxShadow: {
         xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
         'card': '0 4px 24px rgba(0, 0, 0, 0.4)',
-        'card-hover': '0 8px 32px rgba(70, 130, 151, 0.15)',
-        'glow-purple': '0 0 40px rgba(70, 130, 151, 0.3)',
-        'glow-lime': '0 0 40px rgba(111, 156, 181, 0.2)',
+        'card-hover': '0 8px 32px rgba(124, 58, 237, 0.15)',
+        'glow-purple': '0 0 40px rgba(124, 58, 237, 0.3)',
+        'glow-lime': '0 0 40px rgba(209, 240, 114, 0.2)',
       },
       keyframes: {
         "accordion-down": {
@@ -94,8 +94,8 @@ module.exports = {
           "100%": { transform: "rotateY(360deg) rotateX(5deg)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(70, 130, 151, 0.3)" },
-          "50%": { boxShadow: "0 0 40px rgba(70, 130, 151, 0.5)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(124, 58, 237, 0.3)" },
+          "50%": { boxShadow: "0 0 40px rgba(124, 58, 237, 0.5)" },
         },
         "slide-up": {
           from: { opacity: "0", transform: "translateY(20px)" },
