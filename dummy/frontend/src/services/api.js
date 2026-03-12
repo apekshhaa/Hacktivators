@@ -61,6 +61,16 @@ export const updateRewards = async (householdId, rewardsData) => {
     }
 };
 
+export const awardActionPoints = async (householdId, actionType) => {
+    try {
+        const response = await axios.post(`${API_Base_URL}/rewards/${householdId}/action`, { actionType });
+        return response.data;
+    } catch (error) {
+        console.error("Error awarding action points:", error);
+        throw error;
+    }
+};
+
 export const getRiskAnalysis = async (householdId) => {
     try {
         const response = await axios.get(`${API_Base_URL}/risk/${householdId}`);

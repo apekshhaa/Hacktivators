@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Save, ArrowLeft, Check, X, RefreshCw, Trash2, Edit2, Lock, Unlock, Zap, Gem, Calendar, Award, CheckCircle, Gift } from 'lucide-react';
+import { Search, Save, ArrowLeft, Check, X, RefreshCw, Trash2, Edit2, Lock, Unlock, Zap, Gem, Calendar, Award, CheckCircle, Gift, Activity, Heart, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { getRewards, updateRewards } from '../../services/api';
+import { getRewards, awardActionPoints } from '../../services/api';
 
 const DEFAULT_BADGES = [
     { id: 1, name: 'Regular Checkup Family', desc: '10+ checkups completed', icon: '👨‍👩‍👧‍👦', unlocked: false },
@@ -94,21 +94,27 @@ const AdminRewardsPage = () => {
         }
     };
 
-    const saveChanges = async () => {
+    const handleActionAward = async (actionType) => {
         if (!householdId) return;
         setLoading(true);
         try {
-            const payload = {
-                totalPoints: points,
-                currentStreak: streak,
-                badges: badges,
-                benefits: benefits
-            };
-            await updateRewards(householdId, payload);
-            alert("Changes saved successfully!");
+            const result = await awardActionPoints(householdId, actionType);
+            
+            // Update local state with fresh data from backend
+            const updatedReward = result.reward;
+            setPoints(updatedReward.totalPoints);
+            setStreak(updatedReward.currentStreak);
+            setBadges(updatedReward.badges);
+            setBenefits(updatedReward.benefits);
+
+            let message = `${result.message}: +${result.pointsAwarded} pts!`;
+            if (result.achievementBonus > 0) {
+                message += ` \nAchievement Bonus: +${result.achievementBonus} pts! 🏆`;
+            }
+            alert(message);
         } catch (error) {
-            console.error("Error saving changes:", error);
-            alert("Failed to save changes.");
+            console.error("Error awarding points:", error);
+            alert("Failed to award points.");
         } finally {
             setLoading(false);
         }
@@ -168,14 +174,6 @@ const AdminRewardsPage = () => {
                             <ArrowLeft size={16} />
                             Back to Dashboard
                         </button>
-                        <button
-                            onClick={saveChanges}
-                            disabled={loading}
-                            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent text-primary hover:bg-accent/90 transition-all font-semibold text-sm shadow-[0_0_15px_rgba(209,240,114,0.2)]"
-                        >
-                            <Save size={16} />
-                            {loading ? 'Saving...' : 'Save Changes'}
-                        </button>
                     </div>
                 </header>
 
@@ -216,24 +214,51 @@ const AdminRewardsPage = () => {
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    {/* Points Card */}
+                    {/* Quick Actions Card */}
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-7 lg:col-span-2 hover:border-accent/30 transition-all duration-300 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                            <Zap size={100} />
+                        </div>
+                        <div className="text-gray-400 text-xs font-bold tracking-widest uppercase mb-4">Quick Rewards: Award Points</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <button 
+                                onClick={() => handleActionAward('CHECKUP')}
+                                disabled={loading}
+                                className="flex flex-col items-center justify-center p-4 rounded-xl bg-accent/10 border border-accent/20 hover:bg-accent/20 transition-all group"
+                            >
+                                <Activity className="text-accent mb-2 group-hover:scale-110 transition-transform" />
+                                <span className="font-bold text-sm">Medical Checkup</span>
+                                <span className="text-[10px] text-accent/60 uppercase">+50 pts +1 Streak</span>
+                            </button>
+                            <button 
+                                onClick={() => handleActionAward('DONATION')}
+                                disabled={loading}
+                                className="flex flex-col items-center justify-center p-4 rounded-xl bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition-all group"
+                            >
+                                <Heart className="text-red-400 mb-2 group-hover:scale-110 transition-transform" />
+                                <span className="font-bold text-sm text-red-100">Blood Donation</span>
+                                <span className="text-[10px] text-red-400/60 uppercase">+100 pts</span>
+                            </button>
+                            <button 
+                                onClick={() => handleActionAward('SURVEY')}
+                                disabled={loading}
+                                className="flex flex-col items-center justify-center p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 hover:bg-blue-500/20 transition-all group"
+                            >
+                                <TrendingUp className="text-blue-400 mb-2 group-hover:scale-110 transition-transform" />
+                                <span className="font-bold text-sm text-blue-100">Health Survey</span>
+                                <span className="text-[10px] text-blue-400/60 uppercase">+20 pts</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Points Display Card */}
                     <div className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:-translate-y-1 hover:border-accent/30 transition-all duration-300 group">
                         <div className="text-3xl mb-4 group-hover:scale-110 transition-transform origin-center inline-block text-accent">
                             <Gem size={32} />
                         </div>
                         <div className="text-gray-400 text-xs font-bold tracking-widest uppercase mb-2">Total Points</div>
-                        <div className="text-4xl font-bold text-white mb-4">{points}</div>
-                        <div className="flex gap-2">
-                            <input
-                                type="number"
-                                value={points}
-                                onChange={(e) => setPoints(parseInt(e.target.value) || 0)}
-                                className="w-full bg-[#0B2525] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-accent/50"
-                            />
-                            <button onClick={saveChanges} className="bg-accent text-primary px-3 py-2 rounded-lg text-xs font-bold hover:bg-accent/90 transition-colors">
-                                Update
-                            </button>
-                        </div>
+                        <div className="text-4xl font-bold text-white mb-2">{points}</div>
+                        <p className="text-[10px] text-gray-500 uppercase tracking-widest">Automatic Accumulation</p>
                     </div>
 
                     {/* Streak Card */}
@@ -242,18 +267,8 @@ const AdminRewardsPage = () => {
                             <Calendar size={32} />
                         </div>
                         <div className="text-gray-400 text-xs font-bold tracking-widest uppercase mb-2">Checkup Streak</div>
-                        <div className="text-4xl font-bold text-white mb-4">{streak}</div>
-                        <div className="flex gap-2">
-                            <input
-                                type="number"
-                                value={streak}
-                                onChange={(e) => setStreak(parseInt(e.target.value) || 0)}
-                                className="w-full bg-[#0B2525] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-accent/50"
-                            />
-                            <button onClick={saveChanges} className="bg-accent text-primary px-3 py-2 rounded-lg text-xs font-bold hover:bg-accent/90 transition-colors">
-                                Update
-                            </button>
-                        </div>
+                        <div className="text-4xl font-bold text-white mb-2">{streak}</div>
+                        <p className="text-[10px] text-gray-500 uppercase tracking-widest">Calculated by Visits</p>
                     </div>
 
                     {/* Badge Count Card */}
@@ -309,19 +324,15 @@ const AdminRewardsPage = () => {
                                     </div>
                                 </div>
                                 <div className="flex gap-2 pt-2">
-                                    <button
-                                        onClick={() => toggleBadge(badge.id)}
+                                    <div
                                         className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold border transition-all ${badge.unlocked
-                                            ? 'bg-accent text-primary border-accent'
-                                            : 'bg-[#0B2525] text-gray-400 border-white/10 hover:bg-white/5'
+                                            ? 'bg-accent/20 text-accent border-accent/30'
+                                            : 'bg-[#0B2525] text-gray-400 border-white/10'
                                             }`}
                                     >
                                         {badge.unlocked ? <Unlock size={12} /> : <Lock size={12} />}
                                         {badge.unlocked ? 'Unlocked' : 'Locked'}
-                                    </button>
-                                    <button className="p-2 rounded-lg bg-[#0B2525] border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
-                                        <Edit2 size={14} />
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -386,24 +397,10 @@ const AdminRewardsPage = () => {
 
                                     <div className="flex gap-2">
                                         <button
-                                            onClick={() => toggleBenefitStatus(benefit.id)}
-                                            className="p-2 rounded-lg bg-[#0B2525] border border-white/10 text-gray-400 hover:text-accent hover:border-accent/50 hover:bg-white/5 transition-colors"
-                                            title="Toggle Status"
-                                        >
-                                            <RefreshCw size={14} />
-                                        </button>
-                                        <button
                                             className="p-2 rounded-lg bg-[#0B2525] border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
-                                            title="Edit"
+                                            title="View Details"
                                         >
-                                            <Edit2 size={14} />
-                                        </button>
-                                        <button
-                                            onClick={() => deleteBenefit(benefit.id)}
-                                            className="p-2 rounded-lg bg-[#0B2525] border border-white/10 text-gray-400 hover:text-red-400 hover:border-red-400/50 hover:bg-red-900/10 transition-colors"
-                                            title="Delete"
-                                        >
-                                            <Trash2 size={14} />
+                                            <Search size={14} />
                                         </button>
                                     </div>
                                 </div>

@@ -11,6 +11,12 @@ export const DEFAULT_BENEFITS = [
     { id: 3, name: 'Health Insurance Subsidy', points: 600 },
 ];
 
+export const REWARD_ACTIONS = {
+    CHECKUP: { points: 50, streak: 1, message: 'Medical Checkup Completed' },
+    DONATION: { points: 100, streak: 0, message: 'Blood Donation' },
+    SURVEY: { points: 20, streak: 0, message: 'Health Survey Completed' }
+};
+
 export const syncRewardData = async (reward, checkupCount = 0) => {
     // 1. Ensure Defaults exist
     if (!reward.badges || reward.badges.length === 0) {

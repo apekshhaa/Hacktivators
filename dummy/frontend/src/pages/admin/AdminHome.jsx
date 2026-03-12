@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Activity, Gift, Calendar, AlertTriangle, User, TrendingUp, ChevronRight, Search, ShoppingBag, Sparkles, ChevronDown, Plus, X, ArrowLeft, Edit3, Save, Loader2, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import RoleIndicator from '../../components/common/RoleIndicator';
-import mediBot from '../../assets/medi_bot.png';
+import heartBeatVideo from '../../assets/heart_beat.webm';
 
 import { auth } from '../../firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
@@ -335,10 +335,13 @@ const AdminHome = () => {
                     <div className="absolute w-[400px] h-[400px] bg-accent/5 rounded-full blur-[80px] z-0"></div>
                     <div className="absolute w-[350px] h-[350px] border border-white/5 rounded-full z-0 animate-spin-slow"></div>
 
-                    <img
-                        src={mediBot}
-                        alt="Medi-Bot"
-                        className="h-[550px] w-auto object-contain z-10 drop-shadow-[0_0_50px_rgba(209,240,114,0.3)] animate-float-slow"
+                    <video
+                        src={heartBeatVideo}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="h-[550px] w-auto object-contain z-10 drop-shadow-[0_0_50px_rgba(209,240,114,0.3)] mix-blend-screen brightness-110 contrast-125 transition-all duration-1000"
                     />
                 </div>
 
