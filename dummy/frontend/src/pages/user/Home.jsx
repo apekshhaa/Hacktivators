@@ -7,7 +7,7 @@ import ChatBot from '../../components/user/ChatBot';
 import BookingModal from '../../components/user/BookingModal';
 import PreferencesModal from '../../components/user/PreferencesModal';
 import RoleIndicator from '../../components/common/RoleIndicator';
-import CommunityRiskWidget from '../../components/user/CommunityRiskWidget';
+import VillageHealthMap from '../../components/user/VillageHealthMap';
 import { auth } from '../../firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
 
@@ -144,7 +144,7 @@ const Home = () => {
                     </h2>
                     <p className="text-xs text-gray-500 mt-1">Live 14-day outbreak risk indicator for your village</p>
                 </div>
-                <CommunityRiskWidget />
+                <VillageHealthMap />
             </section>
 
             {/* Map Modal */}

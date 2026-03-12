@@ -32,6 +32,18 @@ router.post('/', async (req, res) => {
 
 
 
+
+// Get all households (limited fields for map view)
+router.get('/', async (req, res) => {
+    try {
+        const households = await Household.find({}, 'householdId head village status healthFlags familyMembers.name familyMembers.status familyMembers.flag familyMembers._id');
+        res.json(households);
+    } catch (error) {
+        console.error("Error fetching all households:", error);
+        res.status(500).json({ message: 'Error fetching households' });
+    }
+});
+
 // Get a household by ID
 router.get('/:householdId', async (req, res) => {
     try {

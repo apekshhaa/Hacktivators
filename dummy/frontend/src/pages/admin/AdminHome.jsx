@@ -8,6 +8,7 @@ import { auth } from '../../firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
 
 import { getRecentAppointments, createHousehold, updateHousehold } from '../../services/api';
+import VillageHealthMap from '../../components/user/VillageHealthMap';
 
 const AdminHome = () => {
     const navigate = useNavigate();
@@ -467,7 +468,11 @@ const AdminHome = () => {
 
             </div>
 
-            {/* Add Household Modal */}
+            {/* Village Health Map - Full Width */}
+            <section className="relative z-10 max-w-[1600px] mx-auto px-6 pb-10">
+                <VillageHealthMap />
+            </section>
+
             {showAddModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
                     <div className="bg-[#0f2828] border border-white/20 rounded-2xl p-8 max-w-3xl w-full shadow-2xl relative my-8">
