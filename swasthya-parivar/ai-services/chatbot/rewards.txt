@@ -1,5 +1,0 @@
-A household earns 10 points for every completed medical checkup.
-Completing 3 consecutive monthly checkups gives a bonus of 10 points.
-50 points makes a household eligible for ration benefits.
-Points can also be used for free medicines when available.
-If a checkup is missed, no points are added for that month.
