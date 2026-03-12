@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ArrowLeft, Search, Gift, Sparkles, Activity, Zap, Gem, Calendar, Award, CheckCircle, CheckCircle2, Printer, RefreshCw, RefreshCcw, Users, Dumbbell, Syringe, Save, Check, X, Download, Trash2, Edit2, Lock, Unlock, BarChart2, BarChart3, Star, Medal, Hospital, HeartPulse } from 'lucide-react';
+import { ArrowLeft, Search, Gift, Sparkles, Zap, Gem, Calendar, Award, CheckCircle, RefreshCw, Hospital, HeartPulse, Syringe } from 'lucide-react';
 import { getRewards } from '../../services/api';
 import CommunityMeter from '../../components/admin/CommunityMeter';
 import RoleIndicator from '../../components/common/RoleIndicator';
@@ -294,14 +294,6 @@ const RewardsManagement = () => {
                                             : 'bg-white/5 border-white/10 opacity-50'
                                             }`}
                                     >
-                                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-3xl ${badge.unlocked ? 'bg-green-500/20 border border-green-500/30' : 'bg-white/10 border border-white/10'
-                                            }`}>
-                                            {badge.icon === '🏥' ? <Activity size={28} className="text-accent" /> :
-                                                badge.icon === '💪' ? <Dumbbell size={28} className="text-accent" /> :
-                                                    badge.icon === '💉' ? <Syringe size={28} className="text-accent" /> :
-                                                        badge.icon === '✨' ? <Star size={28} className="text-accent" /> :
-                                                            <Award size={28} className="text-accent" />}
-                                        </div>
                                         <div className="flex-1">
                                             <p className="font-semibold text-white mb-1">{badge.name}</p>
                                             <p className="text-sm text-gray-400 mb-2">{badge.desc}</p>
@@ -369,33 +361,7 @@ const RewardsManagement = () => {
                             </div>
                         </div>
 
-                        {/* Actions */}
-                        <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6">
-                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Administrative Actions</p>
-                            <div className="flex gap-3 flex-wrap">
-                                <button
-                                    onClick={exportData}
-                                    className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-accent/20 border border-white/10 hover:border-accent/30 rounded-lg text-sm font-medium text-gray-300 hover:text-accent transition-all"
-                                >
-                                    <BarChart2 size={16} />
-                                    Export Report
-                                </button>
-                                <button
-                                    onClick={() => window.print()}
-                                    className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-accent/20 border border-white/10 hover:border-accent/30 rounded-lg text-sm font-medium text-gray-300 hover:text-accent transition-all"
-                                >
-                                    <Printer size={16} />
-                                    Print Details
-                                </button>
-                                <button
-                                    onClick={refreshData}
-                                    className="flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-accent/20 border border-white/10 hover:border-accent/30 rounded-lg text-sm font-medium text-gray-300 hover:text-accent transition-all"
-                                >
-                                    <RefreshCw size={16} />
-                                    Refresh Data
-                                </button>
-                            </div>
-                        </div>
+
                     </div>
                 )}
             </main>

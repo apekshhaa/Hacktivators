@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Search, ShoppingBag, MapPin, Play, Activity, Heart, Footprints, MoreVertical, ChevronDown, Sparkles, Gift, Home as HomeIcon, Settings as SettingsIcon } from 'lucide-react';
-import mediBot from '../../assets/medi_bot.png';
+import heartBeatVideo from '../../assets/heart_beat.webm';
 import HospitalMapModal from '../../components/user/HospitalMapModal';
 import ChatBot from '../../components/user/ChatBot';
 import BookingModal from '../../components/user/BookingModal';
@@ -118,11 +118,14 @@ const Home = () => {
 
                     {/* Right Visuals - Minimalist */}
                     <div className="relative h-[600px] flex items-center justify-center">
-                        {/* Custom Medi-Bot Image */}
-                        <img
-                            src={mediBot}
-                            alt="Medi-Bot Doctor"
-                            className="h-[500px] w-auto object-contain z-10 drop-shadow-[0_0_50px_rgba(209,240,114,0.2)] animate-float-slow"
+                        {/* Improved Heart Video */}
+                        <video
+                            src={heartBeatVideo}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="h-[500px] w-auto object-contain z-10 drop-shadow-[0_0_50px_rgba(209,240,114,0.3)] mix-blend-screen brightness-110 contrast-125 transition-all duration-1000"
                         />
 
                         {/* Circular Graphic Behind */}
