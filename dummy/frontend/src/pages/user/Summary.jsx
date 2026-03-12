@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Activity, Calendar, AlertCircle, CheckCircle, Clock, Users, User, Baby, AlertTriangle, Lock, Unlock, ArrowLeft } from 'lucide-react';
+import { Search, Activity, Calendar, AlertCircle, CheckCircle, Clock, Users, User, Baby, AlertTriangle, Lock, Unlock, ArrowLeft, ShieldAlert, Sparkles } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getHouseholdSummary } from '../../services/api';
+import { getHouseholdSummary, getRiskAnalysis } from '../../services/api';
 import PrivacyLockModal from '../../components/user/PrivacyLockModal';
 import RescheduleModal from '../../components/user/RescheduleModal';
 import RoleIndicator from '../../components/common/RoleIndicator';
@@ -18,6 +18,8 @@ const Summary = () => {
     const [privacyModal, setPrivacyModal] = useState({ isOpen: false, member: null });
     const [rescheduleModal, setRescheduleModal] = useState({ isOpen: false });
     const [selectedMemberId, setSelectedMemberId] = useState(null);
+    const [riskData, setRiskData] = useState(null);
+    const [isRiskLoading, setIsRiskLoading] = useState(false);
     const location = useLocation();
 
     // Auto-load data if user has a stored household ID (user mode)
@@ -35,16 +37,24 @@ const Summary = () => {
 
     const performSearch = async (id) => {
         setIsLoaded(false);
+        setIsRiskLoading(true);
         setError(null);
         try {
-            const result = await getHouseholdSummary(id);
+            const [result, riskResult] = await Promise.all([
+                getHouseholdSummary(id),
+                getRiskAnalysis(id)
+            ]);
+            
             if (!result) throw new Error("No data found for this ID");
             setData(result);
+            setRiskData(riskResult);
             setIsLoaded(true);
         } catch (err) {
             console.error("Search error:", err);
             setError("Household not found or server error.");
             setIsLoaded(false);
+        } finally {
+            setIsRiskLoading(false);
         }
     };
 
@@ -96,18 +106,7 @@ const Summary = () => {
     const handleSearch = async (e) => {
         e.preventDefault();
         if (householdId.trim()) {
-            setIsLoaded(false);
-            setError(null);
-            try {
-                const result = await getHouseholdSummary(householdId);
-                if (!result) throw new Error("No data found for this ID");
-                setData(result);
-                setIsLoaded(true);
-            } catch (err) {
-                console.error("Search error:", err);
-                setError("Household not found or server error.");
-                setIsLoaded(false);
-            }
+            performSearch(householdId);
         }
     };
 
@@ -344,6 +343,108 @@ const Summary = () => {
                                     </button>
                                 </div>
                             </div>
+
+                            {/* New: Household Risk Section */}
+                            {!currentSelected && riskData && (
+                                <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500">
+                                    <div className="p-6 border-b border-white/10 flex items-center justify-between bg-accent/5">
+                                        <h3 className="text-lg font-semibold flex items-center gap-2">
+                                            <ShieldAlert size={20} className="text-accent" />
+                                            Overall Household Risk Summary
+                                        </h3>
+                                        <div className={`px-3 py-1 rounded-full text-xs font-bold border ${
+                                            riskData.family?.riskLevel === 'High' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
+                                            riskData.family?.riskLevel === 'Moderate' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' :
+                                            'bg-green-500/20 text-green-400 border-green-500/30'
+                                        }`}>
+                                            Risk Level: {riskData.family?.riskLevel || 'Low'}
+                                        </div>
+                                    </div>
+                                    <div className="p-6 grid md:grid-cols-2 gap-8 items-center text-center md:text-left">
+                                        <div className="space-y-4">
+                                            <div className="flex items-center justify-center md:justify-start gap-4">
+                                                <div className="relative w-24 h-24">
+                                                    <svg className="w-full h-full" viewBox="0 0 100 100">
+                                                        <circle className="text-white/5" strokeWidth="8" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                                        <circle className={
+                                                            riskData.family?.riskLevel === 'High' ? 'text-red-500' :
+                                                            riskData.family?.riskLevel === 'Moderate' ? 'text-orange-500' :
+                                                            'text-green-500'
+                                                        } strokeWidth="8" strokeDasharray={251.2} strokeDashoffset={251.2 - (251.2 * (riskData.family?.avgScore || 0) / 100)} strokeLinecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                                    </svg>
+                                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                                        <span className="text-2xl font-black">{riskData.family?.avgScore || 0}</span>
+                                                        <span className="text-[10px] text-gray-400 uppercase">Score</span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm text-gray-400">Based on all household members,</p>
+                                                    <p className="text-lg font-bold">Health Assessment is {
+                                                        riskData.family?.riskLevel === 'High' ? 'Critical' :
+                                                        riskData.family?.riskLevel === 'Moderate' ? 'Concerning' :
+                                                        'Stable'
+                                                    }</p>
+                                                </div>
+                                            </div>
+
+                                            {riskData.family?.alerts?.length > 0 ? (
+                                                <div className="space-y-2">
+                                                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Active Household Alerts</p>
+                                                    {riskData.family.alerts.map((alert, idx) => (
+                                                        <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-3 flex items-start gap-3">
+                                                            <AlertTriangle size={16} className={alert.severity === 'High' ? 'text-red-400' : 'text-orange-400'} />
+                                                            <div>
+                                                                <p className="text-sm font-medium">{alert.message}</p>
+                                                                {alert.recommendation && <p className="text-xs text-gray-400 mt-1 italic">{alert.recommendation}</p>}
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4 flex items-center gap-3">
+                                                    <CheckCircle size={20} className="text-green-400" />
+                                                    <p className="text-sm text-green-200">No cross-member health risks detected.</p>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="bg-black/20 rounded-2xl p-6 border border-white/5">
+                                            <h4 className="text-sm font-bold flex items-center gap-2 mb-3">
+                                                <Sparkles size={14} className="text-accent" />
+                                                Community Health Context
+                                            </h4>
+                                            <div className="space-y-4">
+                                                <div className="flex justify-between items-center text-sm">
+                                                    <span className="text-gray-400">Village Risk Trend</span>
+                                                    <span className={`font-bold ${riskData.community?.trend === 'Rising' ? 'text-red-400' : 'text-green-400'}`}>
+                                                        {riskData.community?.trend || 'Stable'}
+                                                    </span>
+                                                </div>
+                                                <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                                                    <div className={`h-full ${riskData.community?.trend === 'Rising' ? 'bg-red-500' : 'bg-green-500'} w-1/2`} />
+                                                </div>
+                                                <p className="text-xs text-gray-500 leading-relaxed italic">
+                                                    "{riskData.community?.message || 'Local health patterns appear stable across the village.'}"
+                                                </p>
+                                                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
+                                                    <div className="text-center">
+                                                        <p className="text-[10px] text-gray-500 uppercase">Fever</p>
+                                                        <p className="text-sm font-bold">{riskData.community?.avgFever || 0}%</p>
+                                                    </div>
+                                                    <div className="text-center">
+                                                        <p className="text-[10px] text-gray-500 uppercase">Cough</p>
+                                                        <p className="text-sm font-bold">{riskData.community?.avgCough || 0}%</p>
+                                                    </div>
+                                                    <div className="text-center">
+                                                        <p className="text-[10px] text-gray-500 uppercase">Risk Index</p>
+                                                        <p className="text-sm font-bold text-accent">{riskData.community?.avgRisk || 0}/10</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Family Members Details */}
                             <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
