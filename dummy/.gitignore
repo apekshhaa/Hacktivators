@@ -5,3 +5,8 @@ dist
 coverage
 backend/node_modules
 frontend/node_modules
+
+# Environment variable files (keep keys like Firebase configs private)
+.env
+frontend/.env*
+backend/.env*
