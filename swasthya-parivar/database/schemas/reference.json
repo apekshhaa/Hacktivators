@@ -1,0 +1,3 @@
+{
+  "tables": ["users", "health_records", "appointments", "rewards"]
+}
