@@ -209,4 +209,28 @@ router.put('/:householdId/reschedule', async (req, res) => {
     }
 });
 
+// Update a specific member's symptoms/flag and status
+router.patch('/:householdId/members/:memberId/symptoms', async (req, res) => {
+    try {
+        const { householdId, memberId } = req.params;
+        const { status, flag } = req.body;
+
+        const household = await Household.findOne({ householdId });
+        if (!household) return res.status(404).json({ message: 'Household not found' });
+
+        const member = household.familyMembers.id(memberId);
+        if (!member) return res.status(404).json({ message: 'Member not found' });
+
+        if (status !== undefined) member.status = status;
+        if (flag !== undefined) member.flag = flag;
+
+        await household.save();
+
+        res.json({ message: 'Member symptoms updated successfully', member });
+    } catch (error) {
+        console.error("Error updating member symptoms:", error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 export default router;

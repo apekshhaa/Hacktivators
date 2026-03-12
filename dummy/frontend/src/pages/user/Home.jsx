@@ -71,10 +71,8 @@ const Home = () => {
                             <SettingsIcon size={18} />
                         </button>
 
-                        <Link to="/rewards" state={{ from: '/home' }} className="hidden lg:flex items-center gap-2 bg-accent/10 hover:bg-accent/20 border border-accent/20 text-accent px-5 py-2.5 rounded-full text-sm font-medium transition-all shrink-0 whitespace-nowrap">
-                            <Gift size={16} />
-                            Check Rewards
-                        </Link>
+
+
 
                         <button onClick={handleLogout} className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-all shrink-0 whitespace-nowrap">
                             Logout
@@ -101,12 +99,16 @@ const Home = () => {
                         </h1>
 
                         {/* Subtext */}
-                        {/* Action Link */}
-                        <div className="pt-2">
+                        {/* Action Links */}
+                        <div className="pt-2 flex flex-wrap items-center gap-6">
                             <button onClick={() => navigate('/summary', { state: { from: '/home' } })} className="inline-flex items-center gap-2 text-accent hover:text-accent/80 font-medium transition-colors border-b border-accent/30 hover:border-accent pb-0.5">
                                 <Activity size={18} />
                                 Track Household Health
                             </button>
+                            <Link to="/rewards" state={{ from: '/home' }} className="inline-flex items-center gap-2 text-accent hover:text-accent/80 font-medium transition-colors border-b border-accent/30 hover:border-accent pb-0.5">
+                                <Gift size={18} />
+                                Check Rewards
+                            </Link>
                         </div>
 
                         <div className="flex flex-wrap items-center gap-4 pt-4">

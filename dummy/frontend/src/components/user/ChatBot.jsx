@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [language, setLanguage] = useState('English');
+
     const [messages, setMessages] = useState([
         { role: 'bot', content: 'Hello! I am your Swasthya Parivar assistant. Ask me about reward points, eligibility, or benefits!' }
     ]);
@@ -32,7 +32,7 @@ const ChatBot = () => {
         try {
             const response = await axios.post('http://localhost:5000/api/chat', {
                 question: userMessage,
-                language: language
+                language: 'English'
             });
             setMessages(prev => [...prev, { role: 'bot', content: response.data.answer }]);
         } catch (error) {
@@ -43,7 +43,7 @@ const ChatBot = () => {
         }
     };
 
-    const languages = ['English', 'Hindi', 'Kannada'];
+
 
     return (
         <div className="fixed bottom-6 left-6 z-50 flex flex-col items-start gap-4 font-sans">
@@ -59,17 +59,7 @@ const ChatBot = () => {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-white">Reward Assistant</h3>
-                                <div className="flex gap-2">
-                                    {languages.map(lang => (
-                                        <button
-                                            key={lang}
-                                            onClick={() => setLanguage(lang)}
-                                            className={`text-[10px] px-1.5 py-0.5 rounded border ${language === lang ? 'bg-accent text-[#0a0a1a] border-accent font-bold' : 'text-gray-400 border-white/20'}`}
-                                        >
-                                            {lang}
-                                        </button>
-                                    ))}
-                                </div>
+                                <p className="text-[10px] text-gray-400">Ask me about rewards & benefits</p>
                             </div>
                         </div>
                         <button

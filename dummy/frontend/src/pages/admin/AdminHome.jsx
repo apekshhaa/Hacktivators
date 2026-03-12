@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, Gift, Calendar, AlertTriangle, User, TrendingUp, ChevronRight, Search, ShoppingBag, Sparkles, ChevronDown, Plus, X, ArrowLeft } from 'lucide-react';
+import { Activity, Gift, Calendar, AlertTriangle, User, TrendingUp, ChevronRight, Search, ShoppingBag, Sparkles, ChevronDown, Plus, X, ArrowLeft, Edit3, Save, Loader2, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import RoleIndicator from '../../components/common/RoleIndicator';
 import mediBot from '../../assets/medi_bot.png';
@@ -13,8 +13,16 @@ const AdminHome = () => {
     const navigate = useNavigate();
     const [appointments, setAppointments] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
-    const [modalMode, setModalMode] = useState('add'); // 'add' or 'update'
+    const [modalMode, setModalMode] = useState('add');
     const [isSearching, setIsSearching] = useState(false);
+    // Symptom editor state
+    const [symptomHouseholdId, setSymptomHouseholdId] = useState('');
+    const [symptomMembers, setSymptomMembers] = useState([]);
+    const [symptomLoading, setSymptomLoading] = useState(false);
+    const [symptomError, setSymptomError] = useState('');
+    const [editingMemberId, setEditingMemberId] = useState(null);
+    const [editValues, setEditValues] = useState({ status: '', flag: '' });
+    const [saveSuccess, setSaveSuccess] = useState(null);
     const [formData, setFormData] = useState({
         householdId: '',
         head: '',
@@ -128,38 +136,45 @@ const AdminHome = () => {
         }
     };
 
-    // Modified to load API appointments
-    useEffect(() => {
-        const fetchAppointments = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/appointments');
-                if (response.ok) {
-                    const data = await response.json();
-
-                    // Format the dates for display
-                    const formattedData = data.map(apt => ({
-                        ...apt,
-                        id: apt._id,
-                        time: new Date(apt.date).toLocaleDateString() + ' ' + new Date(apt.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                    }));
-
-                    setAppointments(formattedData.length > 0 ? formattedData : [
-                        { id: 1, patient: "Ramesh Kumar", time: "10:00 AM", type: "General User" },
-                        { id: 2, patient: "Savitri Devi", time: "11:30 AM", type: "Follow-up" },
-                        { id: 3, patient: "Rahul (Child)", time: "02:00 PM", type: "Vaccination" },
-                    ]);
-                }
-            } catch (error) {
-                console.error("Error fetching appointments:", error);
+    // Symptom editor: fetch members by household
+    const fetchSymptomMembers = async () => {
+        if (!symptomHouseholdId.trim()) return;
+        setSymptomLoading(true);
+        setSymptomError('');
+        setSymptomMembers([]);
+        setEditingMemberId(null);
+        try {
+            const res = await fetch(`http://localhost:5000/api/households/${symptomHouseholdId}`);
+            if (res.ok) {
+                const data = await res.json();
+                setSymptomMembers(data.familyMembers || []);
+            } else {
+                setSymptomError('Household not found');
             }
-        };
+        } catch {
+            setSymptomError('Server error');
+        } finally {
+            setSymptomLoading(false);
+        }
+    };
 
-        fetchAppointments();
-
-        // Check for updates every 30 seconds or so
-        const interval = setInterval(fetchAppointments, 30000);
-        return () => clearInterval(interval);
-    }, []);
+    const saveSymptomEdit = async (memberId) => {
+        try {
+            const res = await fetch(`http://localhost:5000/api/households/${symptomHouseholdId}/members/${memberId}/symptoms`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editValues)
+            });
+            if (res.ok) {
+                setSaveSuccess(memberId);
+                setTimeout(() => setSaveSuccess(null), 1500);
+                setEditingMemberId(null);
+                fetchSymptomMembers(); // refresh
+            }
+        } catch {
+            setSymptomError('Failed to save');
+        }
+    };
 
     const removeHealthFlag = (index) => {
         const updated = formData.healthFlags.filter((_, i) => i !== index);
@@ -329,28 +344,101 @@ const AdminHome = () => {
                 {/* Right Column */}
                 <div className="flex flex-col h-full justify-between gap-6 pb-6">
 
-                    {/* Top Right: User Appointments */}
-                    <div className="bg-white/5 border border-white/10 p-8 rounded-3xl flex-1 min-h-[350px] flex flex-col relative overflow-hidden">
+                    {/* Top Right: Edit Patient Symptoms */}
+                    <div className="bg-white/5 border border-white/10 p-6 rounded-3xl flex-1 min-h-[350px] flex flex-col relative overflow-hidden">
                         <div className="flex items-center gap-3 mb-4 text-accent">
-                            <Calendar size={24} />
-                            <h2 className="text-lg font-bold">Future Appointments</h2>
+                            <Edit3 size={24} />
+                            <h2 className="text-lg font-bold">Edit Patient Symptoms</h2>
                         </div>
 
-                        <div className="space-y-3 flex-1 overflow-y-auto pr-1 custom-scrollbar">
-                            {appointments.map((apt) => (
-                                <div key={apt.id} className="bg-black/20 p-3 rounded-xl border border-white/5 flex items-center justify-between hover:bg-black/30 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white text-xs font-bold">
-                                            {apt.patient.charAt(0)}
+                        {/* Search bar */}
+                        <div className="flex gap-2 mb-4">
+                            <input
+                                type="text"
+                                placeholder="Enter Household ID..."
+                                value={symptomHouseholdId}
+                                onChange={(e) => setSymptomHouseholdId(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && fetchSymptomMembers()}
+                                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-accent text-sm"
+                            />
+                            <button
+                                onClick={fetchSymptomMembers}
+                                disabled={symptomLoading}
+                                className="bg-accent text-[#0a0a1a] px-4 py-2.5 rounded-xl font-bold hover:bg-accent/90 transition-all text-sm flex items-center gap-1.5 disabled:opacity-50"
+                            >
+                                {symptomLoading ? <Loader2 size={14} className="animate-spin" /> : <Search size={14} />}
+                                Search
+                            </button>
+                        </div>
+
+                        {symptomError && <p className="text-red-400 text-xs mb-2">{symptomError}</p>}
+
+                        {/* Members list */}
+                        <div className="space-y-2 flex-1 overflow-y-auto pr-1">
+                            {symptomMembers.length === 0 && !symptomLoading && !symptomError && (
+                                <p className="text-gray-500 text-sm text-center py-8">Search a household to view and edit member symptoms.</p>
+                            )}
+                            {symptomMembers.map((m) => (
+                                <div key={m._id} className="bg-black/20 p-3 rounded-xl border border-white/5">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-white text-xs font-bold">
+                                                {m.name?.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <p className="font-semibold text-white text-sm">{m.name}</p>
+                                                <p className="text-[10px] text-gray-400">{m.relation} · {m.age} yrs · {m.gender}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="font-semibold text-white text-sm">{apt.patient}</p>
-                                            <p className="text-[10px] text-gray-400">{apt.type}</p>
+                                        {editingMemberId === m._id ? (
+                                            <button
+                                                onClick={() => saveSymptomEdit(m._id)}
+                                                className="flex items-center gap-1 text-xs bg-green-500/20 text-green-400 px-2.5 py-1 rounded-lg hover:bg-green-500/30 transition-colors"
+                                            >
+                                                <Save size={12} /> Save
+                                            </button>
+                                        ) : saveSuccess === m._id ? (
+                                            <span className="flex items-center gap-1 text-xs text-green-400"><Check size={12} /> Saved</span>
+                                        ) : (
+                                            <button
+                                                onClick={() => { setEditingMemberId(m._id); setEditValues({ status: m.status || 'Healthy', flag: m.flag || '' }); }}
+                                                className="flex items-center gap-1 text-xs bg-accent/10 text-accent px-2.5 py-1 rounded-lg hover:bg-accent/20 transition-colors"
+                                            >
+                                                <Edit3 size={12} /> Edit
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {editingMemberId === m._id ? (
+                                        <div className="mt-2 grid grid-cols-2 gap-2">
+                                            <select
+                                                value={editValues.status}
+                                                onChange={(e) => setEditValues({ ...editValues, status: e.target.value })}
+                                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-white text-xs focus:outline-none focus:border-accent"
+                                            >
+                                                <option value="Healthy" className="bg-[#0a0a1a]">Healthy</option>
+                                                <option value="Follow-up" className="bg-[#0a0a1a]">Follow-up</option>
+                                                <option value="Critical" className="bg-[#0a0a1a]">Critical</option>
+                                                <option value="Due" className="bg-[#0a0a1a]">Due</option>
+                                            </select>
+                                            <input
+                                                type="text"
+                                                placeholder="Symptoms / flag"
+                                                value={editValues.flag}
+                                                onChange={(e) => setEditValues({ ...editValues, flag: e.target.value })}
+                                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-white text-xs placeholder-gray-500 focus:outline-none focus:border-accent"
+                                            />
                                         </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-accent font-medium text-xs">{apt.time}</p>
-                                    </div>
+                                    ) : (
+                                        <div className="mt-1 flex items-center gap-2 text-[11px]">
+                                            <span className={`px-2 py-0.5 rounded-full border ${
+                                                m.status === 'Critical' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
+                                                m.status === 'Follow-up' ? 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' :
+                                                'bg-green-500/20 text-green-400 border-green-500/30'
+                                            }`}>{m.status || 'Healthy'}</span>
+                                            {m.flag && <span className="text-gray-400">Symptoms: <span className="text-white">{m.flag}</span></span>}
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
