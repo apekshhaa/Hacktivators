@@ -69,25 +69,30 @@ const SymptomChecker = ({ member, householdId }) => {
             if (res.ok) {
                 setResult(data);
 
-                // Auto-save symptoms to the member's database record
+                // Send alert to admin instead of auto-saving
                 if (member && householdId && member.memberId) {
                     const symptomText = selected.map(s => {
                         const opt = SYMPTOM_OPTIONS.find(o => o.id === s);
                         return opt ? opt.label : s;
                     }).join(', ');
 
-                    const newStatus = data.risk_level === 'High' ? 'Critical'
-                        : data.risk_level === 'Moderate' || data.risk_level === 'Mild' ? 'Follow-up'
-                        : 'Healthy';
-
                     try {
-                        await fetch(`http://localhost:5000/api/households/${householdId}/members/${member.memberId}/symptoms`, {
-                            method: 'PATCH',
+                        await fetch('http://localhost:5000/api/symptom-alerts', {
+                            method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ status: newStatus, flag: symptomText })
+                            body: JSON.stringify({
+                                householdId,
+                                memberId: member.memberId,
+                                memberName: member.name,
+                                age: member.age,
+                                symptoms: symptomText,
+                                riskLevel: data.risk_level,
+                                riskScore: data.risk_score,
+                                predictedCondition: data.predicted_condition
+                            })
                         });
-                        setSavedMsg('Symptoms saved to your health record.');
-                        setTimeout(() => setSavedMsg(''), 4000);
+                        setSavedMsg('Alert sent to admin for review.');
+                        setTimeout(() => setSavedMsg(''), 5000);
                     } catch {
                         // silent fail — analysis still shown
                     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, Gift, Calendar, AlertTriangle, User, TrendingUp, ChevronRight, Search, ShoppingBag, Sparkles, ChevronDown, Plus, X, ArrowLeft, Edit3, Save, Loader2, Check } from 'lucide-react';
+import { Activity, Gift, Calendar, AlertTriangle, User, TrendingUp, ChevronRight, Search, ShoppingBag, Sparkles, ChevronDown, Plus, X, ArrowLeft, Edit3, Save, Loader2, Check, Bell, ShieldAlert, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import RoleIndicator from '../../components/common/RoleIndicator';
 import heartBeatVideo from '../../assets/heart_beat.webm';
@@ -43,6 +43,10 @@ const AdminHome = () => {
     });
     const [formError, setFormError] = useState('');
     const [formSuccess, setFormSuccess] = useState(false);
+    // Symptom alert state
+    const [symptomAlerts, setSymptomAlerts] = useState([]);
+    const [alertsLoading, setAlertsLoading] = useState(false);
+    const [processingAlert, setProcessingAlert] = useState(null);
 
     useEffect(() => {
         const fetchAppointments = async () => {
@@ -50,7 +54,28 @@ const AdminHome = () => {
             setAppointments(data);
         };
         fetchAppointments();
+        fetchSymptomAlerts();
     }, []);
+
+    const fetchSymptomAlerts = async () => {
+        setAlertsLoading(true);
+        try {
+            const res = await fetch('http://localhost:5000/api/symptom-alerts');
+            if (res.ok) setSymptomAlerts(await res.json());
+        } catch { /* silent */ }
+        finally { setAlertsLoading(false); }
+    };
+
+    const handleAlertAction = async (alertId, action) => {
+        setProcessingAlert(alertId);
+        try {
+            const res = await fetch(`http://localhost:5000/api/symptom-alerts/${alertId}/${action}`, { method: 'PATCH' });
+            if (res.ok) {
+                setSymptomAlerts(prev => prev.filter(a => a._id !== alertId));
+            }
+        } catch { /* silent */ }
+        finally { setProcessingAlert(null); }
+    };
 
     const handleLogout = async () => {
         try {
@@ -239,7 +264,101 @@ const AdminHome = () => {
                     </div>
                 </div>
             </div>
+            {/* Symptom Alert Review Panel */}
+            <section className="relative z-10 max-w-[1600px] mx-auto px-6 py-4">
+                <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm overflow-hidden">
+                    <div className="flex items-center justify-between p-4 border-b border-white/10">
+                        <div className="flex items-center gap-2">
+                            <Bell size={18} className="text-accent" />
+                            <h3 className="font-semibold text-white text-sm">Symptom Alerts</h3>
+                            {symptomAlerts.length > 0 && (
+                                <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full animate-pulse">
+                                    {symptomAlerts.length}
+                                </span>
+                            )}
+                        </div>
+                        <button onClick={fetchSymptomAlerts} className="text-[10px] text-gray-400 hover:text-white transition-colors">
+                            Refresh
+                        </button>
+                    </div>
 
+                    <div className="p-4">
+                        {alertsLoading ? (
+                            <div className="flex items-center justify-center py-8">
+                                <Loader2 size={20} className="animate-spin text-accent" />
+                            </div>
+                        ) : symptomAlerts.length === 0 ? (
+                            <div className="flex items-center gap-3 py-6 justify-center text-gray-500">
+                                <CheckCircle size={18} className="text-green-500" />
+                                <p className="text-sm">No pending symptom alerts</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-3">
+                                {symptomAlerts.map(alert => {
+                                    const isProcessing = processingAlert === alert._id;
+                                    const riskColor = alert.riskLevel === 'High' ? 'red' : alert.riskLevel === 'Moderate' ? 'orange' : alert.riskLevel === 'Mild' ? 'yellow' : 'green';
+                                    return (
+                                        <div key={alert._id} className={`rounded-xl border p-4 transition-all ${
+                                            alert.riskLevel === 'High' ? 'bg-red-500/5 border-red-500/20' :
+                                            alert.riskLevel === 'Moderate' ? 'bg-orange-500/5 border-orange-500/20' :
+                                            'bg-white/5 border-white/10'
+                                        }`}>
+                                            <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+                                                {/* Patient info */}
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="font-bold text-white text-sm">{alert.memberName}</span>
+                                                        <span className="text-[10px] text-gray-500">{alert.age}yrs</span>
+                                                        <span className="text-[10px] text-gray-600"> | </span>
+                                                        <span className="text-[10px] text-gray-400">{alert.householdId}</span>
+                                                        {alert.village && <span className="text-[10px] text-gray-500"> · {alert.village}</span>}
+                                                    </div>
+                                                    <div className="mt-2 flex flex-wrap gap-1.5">
+                                                        {alert.symptoms.split(', ').map((s, i) => (
+                                                            <span key={i} className="text-[11px] bg-white/10 border border-white/10 px-2 py-0.5 rounded-full text-gray-300">{s}</span>
+                                                        ))}
+                                                    </div>
+                                                    <div className="mt-2 flex items-center gap-3">
+                                                        <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border bg-${riskColor}-500/15 text-${riskColor}-400 border-${riskColor}-500/30`}>
+                                                            Risk: {alert.riskLevel} ({alert.riskScore}/100)
+                                                        </span>
+                                                        {alert.predictedCondition && alert.predictedCondition !== 'Healthy' && (
+                                                            <span className="text-[11px] text-accent">Possible: {alert.predictedCondition}</span>
+                                                        )}
+                                                    </div>
+                                                    <p className="text-[10px] text-gray-600 mt-1">
+                                                        {new Date(alert.createdAt).toLocaleString()}
+                                                    </p>
+                                                </div>
+
+                                                {/* Action buttons */}
+                                                <div className="flex gap-2 shrink-0">
+                                                    <button
+                                                        onClick={() => handleAlertAction(alert._id, 'approve')}
+                                                        disabled={isProcessing}
+                                                        className="flex items-center gap-1.5 bg-green-600 hover:bg-green-500 disabled:bg-gray-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                                                    >
+                                                        {isProcessing ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />}
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleAlertAction(alert._id, 'reject')}
+                                                        disabled={isProcessing}
+                                                        className="flex items-center gap-1.5 bg-white/5 hover:bg-red-500/20 border border-white/10 hover:border-red-500/30 disabled:bg-gray-700 text-gray-300 hover:text-red-400 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                                                    >
+                                                        <X size={12} />
+                                                        Reject
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </section>
 
             {/* Main Layout Grid */}
             <div className="relative z-10 max-w-[1600px] mx-auto min-h-[calc(100vh-140px)] h-auto container mt-4 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center px-6 pb-10">

@@ -42,7 +42,7 @@ export const syncRewardData = async (reward, checkupCount = 0) => {
 
         switch (badge.id) {
             case 1: // Regular Checkup Family
-                if (checkupCount >= 10) unlocked = true;
+                if (reward.currentStreak >= 10) unlocked = true;
                 break;
             case 2: // Health Champion
                 if (reward.currentStreak >= 6) unlocked = true;

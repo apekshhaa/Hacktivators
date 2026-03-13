@@ -61,8 +61,14 @@ const RewardsManagement = () => {
                 { id: 3, name: 'Health Insurance Subsidy', points: 600, eligible: false }
             ];
 
-            // Use backend data if available, otherwise defaults
-            const badges = (data.badges && data.badges.length > 0) ? data.badges : DEFAULT_BADGES;
+            // Merge backend 'unlocked' state into DEFAULT_BADGES
+            const badges = DEFAULT_BADGES.map(defaultBadge => {
+                const backendBadge = data.badges?.find(b => b.id === defaultBadge.id);
+                return {
+                    ...defaultBadge,
+                    unlocked: backendBadge ? backendBadge.unlocked : defaultBadge.unlocked
+                };
+            });
 
             // For benefits, map to the structure expected by the render loop below
             // Render loop expects: { benefit: string, eligible: boolean, pointsRequired: number, pointsEarned: number }

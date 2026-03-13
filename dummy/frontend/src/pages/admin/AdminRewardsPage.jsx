@@ -42,6 +42,7 @@ const AdminRewardsPage = () => {
 
     const checkBadgeCondition = (badge, pts, strk) => {
         switch (badge.id) {
+            case 1: return strk >= 10; // Regular Checkup Family: 10+ streak
             case 2: return strk >= 6; // Health Champion: 6 month streak
             case 4: return pts > 800; // Perfect Attendance: simulated by high points
             default: return false;

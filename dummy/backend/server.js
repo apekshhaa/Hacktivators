@@ -63,7 +63,7 @@ app.use(cors({
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true
 }));
 app.use(express.json());
@@ -82,6 +82,9 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/risk", riskRoutes);
+
+import symptomAlertRoutes from './routes/symptomAlerts.js';
+app.use('/api/symptom-alerts', symptomAlertRoutes);
 
 // Login Endpoint
 app.post("/api/login", async (req, res) => {
