@@ -213,57 +213,58 @@ const Summary = () => {
 
                 <div className="flex-1 w-full max-w-6xl mx-auto">
 
-                    {!isLoaded && (
-                        !isUserMode ? (
-                            /* Original Search UI */
-                            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8 animate-in fade-in zoom-in duration-500">
-                                <div className="bg-white/5 p-4 rounded-full border border-white/10">
-                                    <Activity size={48} className="text-accent" />
-                                </div>
-                                <h1 className="text-4xl font-semibold tracking-tight">Track Household Health</h1>
-                                <p className="text-gray-400 max-w-md">Enter the Unique Household ID to view health records, checking history, and upcoming schedules.</p>
+                    {/* Loading State (Unified for both Admin & User during search) */}
+                    {(!isLoaded && isRiskLoading) && (
+                        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+                            <div className="w-12 h-12 border-3 border-white/20 border-t-accent rounded-full animate-spin mx-auto mb-4"></div>
+                            <p className="text-gray-400 font-medium">Loading your dashboard...</p>
+                        </div>
+                    )}
 
-                                {error && <p className="text-red-400">{error}</p>}
-
-                                <form onSubmit={handleSearch} className="flex gap-2 w-full max-w-md">
-                                    <input
-                                        type="text"
-                                        placeholder="Enter Household ID"
-                                        className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-accent/50 transition-all"
-                                        value={householdId}
-                                        onChange={(e) => setHouseholdId(e.target.value)}
-                                    />
-                                    <button type="submit" className="bg-accent text-[#0a0a1a] px-6 py-3 rounded-lg font-semibold hover:bg-accent/90 transition-all">
-                                        View
-                                    </button>
-                                </form>
+                    {/* Admin Search Bar (Only when not loaded and not loading) */}
+                    {(!isLoaded && !isRiskLoading && !isUserMode) && (
+                        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-8 animate-in fade-in zoom-in duration-500">
+                            <div className="bg-white/5 p-4 rounded-full border border-white/10">
+                                <Activity size={48} className="text-accent" />
                             </div>
-                        ) : (
-                            /* Loading or Error State for User Mode */
-                            error ? (
-                                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 animate-in fade-in zoom-in duration-500">
-                                    <div className="bg-red-500/10 p-4 rounded-full border border-red-500/20 mb-6">
-                                        <AlertCircle size={48} className="text-red-400" />
-                                    </div>
-                                    <h2 className="text-2xl font-bold mb-2">Unable to Load Household</h2>
-                                    <p className="text-gray-400 max-w-md mb-8">{error}</p>
-                                    <button
-                                        onClick={() => {
-                                            localStorage.removeItem('userHouseholdId');
-                                            navigate('/home');
-                                        }}
-                                        className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-semibold transition-all border border-white/10"
-                                    >
-                                        Change Household ID
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-                                    <div className="w-12 h-12 border-3 border-white/20 border-t-accent rounded-full animate-spin mx-auto mb-4"></div>
-                                    <p className="text-gray-400 font-medium">Loading your dashboard...</p>
-                                </div>
-                            )
-                        )
+                            <h1 className="text-4xl font-semibold tracking-tight">Track Household Health</h1>
+                            <p className="text-gray-400 max-w-md">Enter the Unique Household ID to view health records, checking history, and upcoming schedules.</p>
+
+                            {error && <p className="text-red-400">{error}</p>}
+
+                            <form onSubmit={handleSearch} className="flex gap-2 w-full max-w-md">
+                                <input
+                                    type="text"
+                                    placeholder="Enter Household ID"
+                                    className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-accent/50 transition-all"
+                                    value={householdId}
+                                    onChange={(e) => setHouseholdId(e.target.value)}
+                                />
+                                <button type="submit" className="bg-accent text-[#0a0a1a] px-6 py-3 rounded-lg font-semibold hover:bg-accent/90 transition-all">
+                                    View
+                                </button>
+                            </form>
+                        </div>
+                    )}
+
+                    {/* User Mode Error State (Only when not loaded, not loading, and is User Mode) */}
+                    {(!isLoaded && !isRiskLoading && isUserMode && error) && (
+                        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 animate-in fade-in zoom-in duration-500">
+                            <div className="bg-red-500/10 p-4 rounded-full border border-red-500/20 mb-6">
+                                <AlertCircle size={48} className="text-red-400" />
+                            </div>
+                            <h2 className="text-2xl font-bold mb-2">Unable to Load Household</h2>
+                            <p className="text-gray-400 max-w-md mb-8">{error}</p>
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem('userHouseholdId');
+                                    navigate('/home');
+                                }}
+                                className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-semibold transition-all border border-white/10"
+                            >
+                                Change Household ID
+                            </button>
+                        </div>
                     )}
 
                     {isLoaded && data ? (

@@ -8,7 +8,7 @@ router.get("/:householdId", async (req, res) => {
   const { householdId } = req.params;
 
   const household = await Household.findOne({ householdId });
-  const checkups = await Checkup.find({ householdId });
+  const checkups = await Checkup.find({ householdId }).sort({ date: -1 }).limit(50);
 
   if (!household) {
     return res.status(404).json({ message: "Household not found" });
